@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0.从零开始 1.工程结构 2.组件库选择 3.关于 Pages 4.自定义Components 5.网络框架的封装 6.一些坑 7.Tips   0.从零开始  为什么要做小程序？最初做头吖的顾客端是App, 所有的产品设计、UI都是按照App的标准出的; 一方面原因是团队, 苹果开发算上我是俩人, 其实美发师端和顾客端是足以支撑的, 但是安卓端只有一个人, 要同步进度开发App有些困难;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="小程序总结">
+<meta property="og:url" content="https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="0.从零开始 1.工程结构 2.组件库选择 3.关于 Pages 4.自定义Components 5.网络框架的封装 6.一些坑 7.Tips   0.从零开始  为什么要做小程序？最初做头吖的顾客端是App, 所有的产品设计、UI都是按照App的标准出的; 一方面原因是团队, 苹果开发算上我是俩人, 其实美发师端和顾客端是足以支撑的, 但是安卓端只有一个人, 要同步进度开发App有些困难;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-29T02:43:05.000Z">
+<meta property="article:modified_time" content="2021-02-17T08:12:18.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>小程序总结</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/04/10/Docker%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&text=小程序总结"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&is_video=false&description=小程序总结"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=小程序总结&body=Check out this article: https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&name=小程序总结&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&t=小程序总结"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">0.从零开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">1.工程结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%84%E4%BB%B6%E5%BA%93%E9%80%89%E6%8B%A9"><span class="toc-number">3.</span> <span class="toc-text">2.组件库选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%85%B3%E4%BA%8E-Pages"><span class="toc-number">4.</span> <span class="toc-text">3.关于 Pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89Components"><span class="toc-number">5.</span> <span class="toc-text">4.自定义Components</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B0%81%E8%A3%85"><span class="toc-number">6.</span> <span class="toc-text">5.网络框架的封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E4%B8%80%E4%BA%9B%E5%9D%91"><span class="toc-number">7.</span> <span class="toc-text">6.一些坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Tips"><span class="toc-number">8.</span> <span class="toc-text">7.Tips</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        小程序总结
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-01-29T02:43:05.000Z" itemprop="datePublished">2019-01-29</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#0%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B">0.从零开始</a></li>
+<li><a href="#1%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84">1.工程结构</a></li>
+<li><a href="#2%E7%BB%84%E4%BB%B6%E5%BA%93%E9%80%89%E6%8B%A9">2.组件库选择</a></li>
+<li><a href="#3%E5%85%B3%E4%BA%8E-pages">3.关于 Pages</a></li>
+<li><a href="#4%E8%87%AA%E5%AE%9A%E4%B9%89components">4.自定义<code>Components</code></a></li>
+<li><a href="#5%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B0%81%E8%A3%85">5.网络框架的封装</a></li>
+<li><a href="#6%E4%B8%80%E4%BA%9B%E5%9D%91">6.一些坑</a></li>
+<li><a href="#7tips">7.Tips</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="0-从零开始">0.从零开始</h3>
+<ul>
+<li>为什么要做小程序？最初做头吖的顾客端是<code>App</code>, 所有的产品设计、<code>UI</code>都是按照<code>App</code>的标准出的; 一方面原因是团队, 苹果开发算上我是俩人, 其实美发师端和顾客端是足以支撑的, 但是安卓端只有一个人, 要同步进度开发<code>App</code>有些困难; 另一方面是出于产品推广和运营的考虑, 现在这个时代, 让用户去下载<code>App</code>成本太高, 大多数人手机里的<code>App</code>都是有固定数量的, 但是微信几乎人人都有, 不得不说, 腾讯这么多年对于用户的积累是成功的; 正是因为有这么多用户, 想推什么其实都很容易, 从微信支付抗衡支付宝, 到非常赚钱的游戏, 腾讯推广起来都是很快的;</li>
+<li>我对小程序的理解？完全是嵌套在微信生态圈里面的、绑架用户、绑架苹果公司的产物; 原理其实很简单, 浏览器(<code>webView</code>)底层支持, 加入一些不明觉厉的<code>API</code>, 其实瓶颈还是系统的限制; 多层嵌套之后, 权限、功能以及可实现的点都是系统的<strong>子集的子集</strong>了, 加上小程序开发团队对于所谓的<strong>用户隐私的保护</strong>, 使得限制很多, 整体很封闭; 个人觉得其实没有必要模仿苹果(以及 8.0 版本之后的安卓), 那么的注重沙盒概念, 因为不涉及到硬件, 封闭永远是瓶颈; 当然它是有自己的优点的, 推广简单、易于使用等等;</li>
+<li>为什么叫从零开始？因为真的是从零开始, 在做这个项目之前, 我的技术栈里是没有 web 前端的, 从<code>React</code>到<code>JS</code>到<code>HTML</code>、<code>CSS</code>基本都是从零开始; <code>web</code>端<code>React</code>项目开始的时候时间还比较充裕, 基本都是自学, 到后来决定开发小程序的时候, 项目时间已经比较紧迫了, 那我只能选择最快的学习方式(花钱买的视频教程@.@); 官方出品的教程, 质量还不错, 基本上可以说挑挑捡捡看过之后(看了差不多一个星期吧), 就直接进入开发了;</li>
+</ul>
+<h3 id="1-工程结构">1.工程结构</h3>
+<ul>
+<li>
+<p>上面也提到了, 我没做过小程序, 但是移动端开发好歹做了几年, 大概工程结构是按照以前做移动端的理解去划分的:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">├── i-Components             # 三方组件库, 因为选择的第一个组件库叫iView, 所以直接用i开头了</span><br><span class="line">├── m-Components             # 自定义组件库, m代表My</span><br><span class="line">├── img                      # 图片静态资源</span><br><span class="line">│   └── N多目录               # 按业务逻辑对资源进行分组, 没什么好说的</span><br><span class="line">├── pages                    # 页面目录</span><br><span class="line">│   ├── common               # 通用页面(目前只有授权页面)</span><br><span class="line">│   ├── N多目录               # 按业务逻辑对页面进行分组, 没什么好说的</span><br><span class="line">├── utils                    # 工具类</span><br><span class="line">│   ├── supports             # 三方工具</span><br><span class="line">│   ├── network.js           # 网络框架&amp;业务逻辑接口</span><br><span class="line">│   ├── utils.js             # 自定义的工具类</span><br><span class="line">├── app.js                   # 小程序生命周期起始</span><br><span class="line">├── app.json                 # 小程序的权限、路由、信息以及配色风格等配置</span><br><span class="line">├── app.wxss                 # 自带的, 到现在也没用上, 等以后用了再回来修改文档吧</span><br><span class="line">├── project.config.json      # 自带的, 看起来是IDE自动对工程生成的一些配置, 我们项目中没对这个文件进行过操作</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-组件库选择">2.组件库选择</h3>
+<ul>
+<li>组件库这个概念是做了<code>React</code>项目之后对<code>web</code>前端技术的新认知; 在开始做小程序之前, 我就坚定的相信, 小程序一定有成熟的组件库! 所以直接开搜, 在体验过后, 拿到 4 个备选组件库; 分别是:
+<ul>
+<li>1)<a target="_blank" rel="noopener" href="https://weapp.iviewui.com/docs/guide/start">iView</a></li>
+<li>2)<a target="_blank" rel="noopener" href="https://youzan.github.io/vant-weapp/#/cell">VantUI</a></li>
+<li>3)<a target="_blank" rel="noopener" href="https://meili.github.io/min/docs/minui/index.html#README">MinUI</a></li>
+<li>4)<a target="_blank" rel="noopener" href="https://wux-weapp.github.io/wux-weapp-docs/#/quickstart">WuxUI</a></li>
+</ul>
+</li>
+<li>目前项目中使用的是<code>iView&amp;WuxUI</code>; <code>iView</code>的源码比较好理解, 功能实现比较简洁; <code>WuxUI</code>实现了一些比较高级的组件, 但是代码比较难懂, 修改起来比较难; 所以最终我们的项目中对于组件库的使用规则是这样的: 优先<code>iView</code>, <code>iView</code>没有的, 用<code>WuxUI</code>; 动态扩展原则, 用到的组件导入项目, 没有用到的不导入;</li>
+<li>另外两个组件没有使用的原因: 1.<code>VantUI</code>是有赞旗下的团队开发的, 其实从效果和代码质量上来说没什么问题, 只不过其中大多数高级组件都是为电商项目提供的, 如果我们以后上商城项目, <code>VantUI</code>还是可以选择的; 2.<code>MinUI</code>其实也不错, 只是我当时 clone 的版本比较封闭, 我记得所有的组件都做了加密, 看不到源码, 不能修改当然就不选择咯, 没什么好说的, 组件库的选择一定要自己可以掌控、把握(后来我再去看的时候, 源码好像公布出来了, 但是对于我们项目来说已经没有什么意义了);</li>
+</ul>
+<h3 id="3-关于-Pages">3.关于 Pages</h3>
+<ul>
+<li>
+<p>结构小程序里面的每个<code>page</code>分为以下 4 个部分:</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>js</td>
+<td>生命周期、data、方法、逻辑</td>
+</tr>
+<tr>
+<td>json</td>
+<td>组件、页面配置</td>
+</tr>
+<tr>
+<td>wxml</td>
+<td>页面布局、元素</td>
+</tr>
+<tr>
+<td>wxss</td>
+<td>样式</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>生命周期&amp;常用方法</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onLoad</td>
+<td>页面加载(数据初始化、网络初始化、页面传递参数)</td>
+</tr>
+<tr>
+<td>onReady</td>
+<td>页面初次渲染完成</td>
+</tr>
+<tr>
+<td>onShow</td>
+<td>页面显示(相当于 Apple 开发中的 viewWillAppear, 页面的压栈-&gt;返回、小程序的后台-&gt;前台切换等都会触发这个方法, 有些需要实时刷新的数据请求会放在这里)</td>
+</tr>
+<tr>
+<td>onHide</td>
+<td>页面隐藏(压栈-&gt;返回)</td>
+</tr>
+<tr>
+<td>onUnload</td>
+<td>页面卸载(压栈-&gt;返回-&gt;内存释放)</td>
+</tr>
+<tr>
+<td>onPullDownRefresh</td>
+<td>用户下拉动作</td>
+</tr>
+<tr>
+<td>onReachBottom</td>
+<td>页面上拉触底事件的处理函数(一些非 scrollView 的长页面中加载更多操作是放在这里的)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>吐个槽</p>
+<ul>
+<li><code>js</code>中方法不能分组(React 也是)!</li>
+<li><code>js</code>中互相引用会出大麻烦！(<code>a.js</code>引入<code>b.js</code>同时<code>b.js 中也引入了</code>a.js`)</li>
+<li><code>json</code>中漏引了组件没有提示！</li>
+<li><code>json</code>中引入组件最后一行不能加逗号！</li>
+<li><code>wxml</code>的<code>&#123;&#123;&#125;&#125;</code>写法太难受了！</li>
+<li><code>wxss</code>不能像<code>less</code>那样写！</li>
+<li><code>wxss</code>中位置的计算好麻烦(尤其是长页面中<code>position</code>有<code>fix</code>的情况)！</li>
+</ul>
+</li>
+<li>
+<p>夸一夸</p>
+<ul>
+<li><code>wxml</code>中的<code>for</code>循环还是比较方便的, 个人认为比<code>React</code>的循环用起来要方便;</li>
+<li><code>wxss</code>中的<code>rpx</code>单位很强大, 对于我这种写习惯了移动端适配的人来说太友好啦！</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-自定义Components">4.自定义<code>Components</code></h3>
+<ul>
+<li>创建
+<ul>
+<li>文件夹上面右键创建<code>Components</code>就行啦！</li>
+</ul>
+</li>
+<li>结构
+<ul>
+<li>跟<code>Pages</code>差不多, 只是<code>js</code>的<code>methods</code>有些限制;</li>
+</ul>
+</li>
+<li>吐槽及夸奖同<code>Pages</code></li>
+</ul>
+<h3 id="5-网络框架的封装">5.网络框架的封装</h3>
+<ul>
+<li>(除上传外)全部使用<code>wx.request</code>接口进行的封装, 参数为:
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>method</td>
+<td>指定 REST 行为(GET/POST/PUT/DELETE)</td>
+</tr>
+<tr>
+<td>url</td>
+<td>接口地址</td>
+</tr>
+<tr>
+<td>data</td>
+<td>参数</td>
+</tr>
+<tr>
+<td>success</td>
+<td>成功回调</td>
+</tr>
+<tr>
+<td>fail</td>
+<td>失败回调</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>上传使用的<code>wx.uploadFile</code>, 参数、方法跟<code>request</code>差不多, 就不赘述了;</li>
+</ul>
+<h3 id="6-一些坑">6.一些坑</h3>
+<ul>
+<li>1)开发工具作者的初心是美好的, 想集各大家所长, 但是有些用着不太方便的地方:
+<ul>
+<li>Mac 下经常出现点击文件之后里面空白, 需要点击其他文件再回来代码才出现, 甚至不出现, 只有大退<code>IDE</code>才好;</li>
+<li>复制粘贴代码的时候经常触发<code>IDE</code>的代码提示, 导致粘贴完的代码里混入了一些奇奇怪怪的东西;</li>
+<li>代码提示太多, 经常一不小心按了回车就自动生成一大堆乱七八糟的代码;</li>
+</ul>
+</li>
+<li>2)原生组件
+<ul>
+<li>这个问题是在使用<code>video</code>组件时发现的; 小程序自定义了一些“原生组件”, 这些组件的层级特别高, 而且对<code>z-index</code>免疫, 虽然可以用<code>cover-view/cover-image</code>等办法屏蔽掉一部分问题, 但是用起来真的是难受, 最重要的是这些<strong>原生组件</strong>没法在<code>scroll-view</code>、<code>swiper</code>、<code>movable-view</code>中使用, 我觉得这个并不是系统/框架的限制, 纯粹是小程序开发者自己的问题; <strong>【后来更新版本出了同层渲染的概念, 我也有过一些尝试, 在我的实验范围内, 并没有完全解决原生组件的层级关系, 在某些特定的情况下还是不能正常使用原生组件的同层渲染】</strong></li>
+</ul>
+</li>
+<li>3)预览&amp;调试
+<ul>
+<li>扫码预览需要扫码的人有开发权限这个设定太 SB 了！而且速度很慢, 经常出现点击了好几次预览手机上也不弹出来, 最后一起弹一堆的情况;</li>
+<li>真机调试是走<code>Internet</code>的！如果说数据线调试有系统限制的瓶颈, 为什么不能做成内网 <code>WIFI</code>调试呢?!!!</li>
+</ul>
+</li>
+<li>4)权限(用户信息、手机号)
+<ul>
+<li>现在用户的授权需要<code>button</code>上<code>bindType</code>, 让用户主动去触发, 导致交互对用户很不友好、开发者的架构成本也上升, 我觉得这块是模仿苹果/安卓 8.0, 纯粹是模仿, 一点用都没有！</li>
+<li>手机号也一样! 你微信的用户! 你自己的生态! 还需要用户授权？!!!</li>
+</ul>
+</li>
+<li>5)<code>组件/API</code>的<code>bug</code>
+<ul>
+<li>小程序开发团队解决问题的速度真的是慢极了！从出来到现在两年了, 居然一些常用组件的文档下面还标记着<code>bug</code>:…标记了还不解决…哎！！！还有一些修改依赖于微信的升级, 就拿<code>video</code>在<code>iOS12.2</code>上的问题来说, 从发现到修复用了 20 天时间;</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-Tips">7.Tips</h3>
+<ul>
+<li>
+<p><code>tabBar</code></p>
+<ul>
+<li>做头吖的业务结构是<code>Tabbar</code>嵌套组成的, 小程序对这块的支持还可以, 直接在<code>app.json</code>中配置<code>tabBar</code>字段及其属性就行了, 只不过可定制的东西太少了, 比如异形的<code>tabBar</code>根本就是个梦;</li>
+</ul>
+</li>
+<li>
+<p>生成文件</p>
+<ul>
+<li><code>Pages</code>只需要在对应位置创建好目录, 然后在<code>app.json</code>中配置路由, 直接保存, 就生成文件了, 这点做的还算友好, 文件里面一些基础的代码都生成好了;</li>
+<li><code>Components</code>上面讲过了, 创建起来也算方便;</li>
+</ul>
+</li>
+<li>
+<p>页面标题</p>
+<ul>
+<li>在<code>Pages</code>的<code>json</code>文件中修改<code>navigationBarTitleText</code>字段就可以了;</li>
+<li>如果想动态改变需要调用微信的<code>API</code>:<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wx.setNavigationBarTitle(&#123;</span><br><span class="line">  title: <span class="string">&quot;当前页面&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>页面传递参数(在<code>onLoad</code>中接收参数)</p>
+<ul>
+<li>
+<p>简单参数:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传递:</span></span><br><span class="line">wx.navigateTo(&#123;</span><br><span class="line">  url: <span class="string">`/xx/xx/xx/xx?a=..&amp;b=..=`</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收:</span></span><br><span class="line">options.a;</span><br><span class="line">options.b;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>复杂参数(比如整个<code>json</code>串):</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传递:</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="built_in">JSON</span>.stringify(jsonStr);</span><br><span class="line">wx.navigateTo(&#123;</span><br><span class="line">  url: <span class="string">`/xx/xx/xx/xx?a=<span class="subst">$&#123;a&#125;</span>`</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收:</span></span><br><span class="line"><span class="built_in">JSON</span>.parse(options.a);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>更复杂参数:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">对象数据长度过大时会报错</span></span><br><span class="line"><span class="comment">因为url传参时程序把过长的那段数据给截取掉了</span></span><br><span class="line"><span class="comment">确切的说是因为!@#$%^&amp;*()这些特殊符号导致的截断</span></span><br><span class="line"><span class="comment">导致数据转换回来时格式不对而报错</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 跳转url时的转换方法</span></span><br><span class="line"><span class="built_in">encodeURIComponent</span>(<span class="built_in">JSON</span>.stringify(obj));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收参数页面的转换方法</span></span><br><span class="line"><span class="built_in">JSON</span>.parse(<span class="built_in">decodeURIComponent</span>(options.obj));</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>页面反向传值(子页面向父页面传值)</p>
+<ul>
+<li>
+<p>方法 1 通过<code>EventChannel</code>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A页面:</span></span><br><span class="line">wx.navigateTo(&#123;</span><br><span class="line">  url: <span class="string">&#x27;/pages/index/B&#x27;</span>,</span><br><span class="line">  events:&#123;</span><br><span class="line">    selectedEvent:<span class="function">(<span class="params">selItem</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">this</span>.setData(&#123;</span><br><span class="line">        selectedValue:selItem.value</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//B页面:</span></span><br><span class="line">onClickedCell: <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 选中的item</span></span><br><span class="line">    <span class="keyword">let</span> item = e.currentTarget.dataset.text;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> eventChannel = <span class="built_in">this</span>.getOpenerEventChannel()</span><br><span class="line">    eventChannel.emit(<span class="string">&#x27;selectedEvent&#x27;</span>, item)</span><br><span class="line">    wx.navigateBack()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>方法 2 通过<code>page</code>栈查找:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// B页面:</span></span><br><span class="line"><span class="keyword">let</span> arr = getCurrentPages();</span><br><span class="line"><span class="keyword">let</span> lastPage = arr.length &gt;= <span class="number">2</span> ? arr[arr.length - <span class="number">2</span>] : <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">if</span> (!!lastPage &amp;&amp; lastPage.route == <span class="string">&quot;pages/index/A&quot;</span>) &#123;</span><br><span class="line">  lastPage.setData(&#123;</span><br><span class="line">    selectedValue: item.value,</span><br><span class="line">  &#125;);</span><br><span class="line">  wx.navigateBack();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>组件触发<code>Event</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 组件内:</span></span><br><span class="line"><span class="built_in">this</span>.triggerEvent(<span class="string">&#x27;&lt;事件名称&gt;&#x27;</span>, &lt;参数&gt;,  &lt;options&gt;);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">引用处:</span></span><br><span class="line"><span class="comment">1.wxml中需要bind:&lt;事件名称&gt;=&quot;xxx&quot;</span></span><br><span class="line"><span class="comment">2.js中实现xxx方法需要带参数,</span></span><br><span class="line"><span class="comment">  根据传递处参数组织不同, value的层级也不同</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>元素查找(查找元素边界值)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 页面查找</span></span><br><span class="line">wx.createSelectorQuery();</span><br><span class="line"><span class="comment">// 组件内查找</span></span><br><span class="line">wx.createSelectorQuery().in(<span class="built_in">this</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>带参数重载页面</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pages = getCurrentPages();</span><br><span class="line"><span class="keyword">const</span> perpage = pages[pages.length - <span class="number">1</span>]; <span class="comment">//当前页面</span></span><br><span class="line"><span class="keyword">const</span> keyList = <span class="built_in">Object</span>.keys(perpage.options); <span class="comment">//当前页面携带的路由参数</span></span><br><span class="line"><span class="keyword">if</span> (keyList.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> keys = <span class="string">&quot;?&quot;</span>;</span><br><span class="line">  keyList.forEach(<span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">    index === <span class="number">0</span></span><br><span class="line">      ? (keys = keys + item + <span class="string">&quot;=&quot;</span> + perpage.options[item])</span><br><span class="line">      : (keys = keys + <span class="string">&quot;&amp;&quot;</span> + item + <span class="string">&quot;=&quot;</span> + perpage.options[item]);</span><br><span class="line">  &#125;);</span><br><span class="line">  wx.reLaunch(&#123;</span><br><span class="line">    url: <span class="string">&quot;/&quot;</span> + perpage.route + keys,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  wx.reLaunch(&#123;</span><br><span class="line">    url: <span class="string">&quot;/&quot;</span> + perpage.route, <span class="comment">//当前页面路由地址</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>引入其他 js(比如工具类)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js内需要对function做声明:</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//  使用(貌似只能用相对路径, 有点烦):</span></span><br><span class="line"><span class="keyword">var</span> utils = <span class="built_in">require</span>(<span class="string">&quot;.xxx/xxx/xx&quot;</span>);</span><br><span class="line">utils.xxx方法直接调用就行了;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>存储</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wx.getStorageSync;</span><br><span class="line">wx.setStorageSync;</span><br><span class="line"><span class="comment">// 有异步的方法, 但是我没用, 怕丢数据, 具体可以参考官方文档</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">0.从零开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">1.工程结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BB%84%E4%BB%B6%E5%BA%93%E9%80%89%E6%8B%A9"><span class="toc-number">3.</span> <span class="toc-text">2.组件库选择</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%85%B3%E4%BA%8E-Pages"><span class="toc-number">4.</span> <span class="toc-text">3.关于 Pages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89Components"><span class="toc-number">5.</span> <span class="toc-text">4.自定义Components</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%B0%81%E8%A3%85"><span class="toc-number">6.</span> <span class="toc-text">5.网络框架的封装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E4%B8%80%E4%BA%9B%E5%9D%91"><span class="toc-number">7.</span> <span class="toc-text">6.一些坑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-Tips"><span class="toc-number">8.</span> <span class="toc-text">7.Tips</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&text=小程序总结"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&is_video=false&description=小程序总结"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=小程序总结&body=Check out this article: https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&title=小程序总结"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&name=小程序总结&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/&t=小程序总结"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

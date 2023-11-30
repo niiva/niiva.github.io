@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0.致敬Ant Design Pro开发者 1.工程结构 2.Ant Design Pro的路由(坑、改造、以及回滚) 3.网络框架的定制及改造 4.存储部分改造及应用 5.mock 的使用 6.本地调试+线上部署的修改点及原因(包括Nginx配置解决方案) 7.其他杂七杂八的事情 补充~~~   0.致敬Ant Design Pro开发者  废话不多说, 点 100 个赞, 蚂蚁金服的技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ant Design Pro改造">
+<meta property="og:url" content="https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="0.致敬Ant Design Pro开发者 1.工程结构 2.Ant Design Pro的路由(坑、改造、以及回滚) 3.网络框架的定制及改造 4.存储部分改造及应用 5.mock 的使用 6.本地调试+线上部署的修改点及原因(包括Nginx配置解决方案) 7.其他杂七杂八的事情 补充~~~   0.致敬Ant Design Pro开发者  废话不多说, 点 100 个赞, 蚂蚁金服的技术">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-12-30T10:50:44.000Z">
+<meta property="article:modified_time" content="2021-02-16T10:12:07.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ant Design Pro改造</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/01/29/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E6%80%BB%E7%BB%93/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/07/25/ffmpeg%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&text=Ant Design Pro改造"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&is_video=false&description=Ant Design Pro改造"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ant Design Pro改造&body=Check out this article: https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&name=Ant Design Pro改造&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&t=Ant Design Pro改造"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-%E8%87%B4%E6%95%ACAnt-Design-Pro%E5%BC%80%E5%8F%91%E8%80%85"><span class="toc-number">1.</span> <span class="toc-text">0.致敬Ant Design Pro开发者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">1.工程结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Ant-Design-Pro%E7%9A%84%E8%B7%AF%E7%94%B1-%E5%9D%91%E3%80%81%E6%94%B9%E9%80%A0%E3%80%81%E4%BB%A5%E5%8F%8A%E5%9B%9E%E6%BB%9A"><span class="toc-number">3.</span> <span class="toc-text">2.Ant Design Pro的路由(坑、改造、以及回滚)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%9A%E5%88%B6%E5%8F%8A%E6%94%B9%E9%80%A0"><span class="toc-number">4.</span> <span class="toc-text">3.网络框架的定制及改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AD%98%E5%82%A8%E9%83%A8%E5%88%86%E6%94%B9%E9%80%A0%E5%8F%8A%E5%BA%94%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">4.存储部分改造及应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-mock-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">5.mock 的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95-%E7%BA%BF%E4%B8%8A%E9%83%A8%E7%BD%B2%E7%9A%84%E4%BF%AE%E6%94%B9%E7%82%B9%E5%8F%8A%E5%8E%9F%E5%9B%A0-%E5%8C%85%E6%8B%ACNginx%E9%85%8D%E7%BD%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">7.</span> <span class="toc-text">6.本地调试+线上部署的修改点及原因(包括Nginx配置解决方案)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%85%B6%E4%BB%96%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">8.</span> <span class="toc-text">7.其他杂七杂八的事情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85"><span class="toc-number">9.</span> <span class="toc-text">补充~~~</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Ant Design Pro改造
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2018-12-30T10:50:44.000Z" itemprop="datePublished">2018-12-30</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#0%E8%87%B4%E6%95%ACant-design-pro%E5%BC%80%E5%8F%91%E8%80%85">0.致敬<code>Ant Design Pro</code>开发者</a></li>
+<li><a href="#1%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84">1.工程结构</a></li>
+<li><a href="#2ant-design-pro%E7%9A%84%E8%B7%AF%E7%94%B1%E5%9D%91-%E6%94%B9%E9%80%A0-%E4%BB%A5%E5%8F%8A%E5%9B%9E%E6%BB%9A">2.<code>Ant Design Pro</code>的路由(坑、改造、以及回滚)</a></li>
+<li><a href="#3%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%9A%E5%88%B6%E5%8F%8A%E6%94%B9%E9%80%A0">3.网络框架的定制及改造</a></li>
+<li><a href="#4%E5%AD%98%E5%82%A8%E9%83%A8%E5%88%86%E6%94%B9%E9%80%A0%E5%8F%8A%E5%BA%94%E7%94%A8">4.存储部分改造及应用</a></li>
+<li><a href="#5mock-%E7%9A%84%E4%BD%BF%E7%94%A8">5.mock 的使用</a></li>
+<li><a href="#6%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95%E7%BA%BF%E4%B8%8A%E9%83%A8%E7%BD%B2%E7%9A%84%E4%BF%AE%E6%94%B9%E7%82%B9%E5%8F%8A%E5%8E%9F%E5%9B%A0%E5%8C%85%E6%8B%ACnginx%E9%85%8D%E7%BD%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">6.本地调试+线上部署的修改点及原因(包括<code>Nginx</code>配置解决方案)</a></li>
+<li><a href="#7%E5%85%B6%E4%BB%96%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB%E7%9A%84%E4%BA%8B%E6%83%85">7.其他杂七杂八的事情</a></li>
+<li><a href="#%E8%A1%A5%E5%85%85~~~">补充~~~</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="0-致敬Ant-Design-Pro开发者">0.致敬<code>Ant Design Pro</code>开发者</h3>
+<ul>
+<li>废话不多说, 点 100 个赞, 蚂蚁金服的技术团队真的 NB, 从架构层到组件细节我觉得都很优美, 虽然有些细节问题或者小<code>bug</code>之类的, 但这个项目真的让我学到了很多东西;</li>
+</ul>
+<h3 id="1-工程结构">1.工程结构</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">├── config                   # umi 配置, 包含路由, 构建等配置</span><br><span class="line">├── mock                     # 本地模拟数据</span><br><span class="line">├── public</span><br><span class="line">│   └── favicon.png          # Favicon</span><br><span class="line">├── src</span><br><span class="line">│   ├── assets               # 本地静态资源</span><br><span class="line">│   ├── components           # 业务通用组件</span><br><span class="line">│   ├── e2e                  # 集成测试用例</span><br><span class="line">│   ├── layouts              # 通用布局</span><br><span class="line">│   ├── models               # 全局 dva model</span><br><span class="line">│   ├── pages                # 业务页面入口和常用模板</span><br><span class="line">│   ├── services             # 后台接口服务</span><br><span class="line">│   ├── utils                # 工具库</span><br><span class="line">│   ├── locales              # 国际化资源</span><br><span class="line">│   ├── global.less          # 全局样式</span><br><span class="line">│   └── global.js            # 全局 JS</span><br><span class="line">├── tests                    # 测试工具</span><br><span class="line">├── README.md                # 说明文档</span><br><span class="line">└── package.json             # 基础库</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这块基本没动, 按照原有的工程结构对现有业务进行了扩充和删减; 主要是<code>pages&amp;models</code>, 对公司现有业务进行拆分;</li>
+<li><strong>遗留问题:</strong>
+<ul>
+<li>工期比较紧, <code>services</code>下的业务没有做对应拆分,这里如果按业务逻辑把接口拆分开, 可能工程看起来会更加清晰;</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-Ant-Design-Pro的路由-坑、改造、以及回滚">2.<code>Ant Design Pro</code>的路由(坑、改造、以及回滚)</h3>
+<ul>
+<li>
+<p>先说说<code>Ant Design Pro</code>原有的路由和我自己的看法吧;</p>
+</li>
+<li>
+<p>在工程的<code>config</code>目录下, 有一个<code>router.config.js</code>文件, 是整个<code>Ant Design Pro</code>的<code>经脉</code>; 其实我觉得<code>Ant Design Pro</code>目前最多的用处还是项目展示, 可能是为了配置方便, 它把<strong>路由</strong>、<strong>菜单(可多级)</strong>、<strong>权限</strong>配置都放在这里了, 贴一小段代码感受一下:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> path: &#x27;/&#x27;,</span><br><span class="line"> redirect: &#x27;/dashboard/analysis&#x27;,</span><br><span class="line"> authority: [&#x27;admin&#x27;, &#x27;user&#x27;]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>其实看起来比较好理解, <code>path</code>代表页面路径, <code>redirect</code>代表重定向路径, <code>authority</code>代表权限(上例中, 代表该页面<code>admin&amp;user</code>权限都可访问); 但是权限这块给我感觉是个小坑, 估计以后的版本会修改这个设定(<mark>事实证明我的猜测是对的, 后来 4.0/5.0 对动态路由的支持变得很友好</mark>), 在<code>src/utils</code>目录下有个<code>authority.js</code>文件, 是对权限进行判断的工具类, 里面是对上面的<code>admin&amp;user</code>进行判定的; 其坑有 2:</p>
+<ul>
+<li>
+<ol>
+<li>角色及其对应的菜单是固定的, 这点不太符合大多数管理后台对角色权限配置的业务逻辑;</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>在同一<code>PC&amp;浏览器</code>进行用户切换的时候, 由于登录后会跳转到之前浏览的页面, 那么就会导致如果两个用户权限不同, 会有一些比较奇怪的问题, 流程如下:</li>
+</ol>
+<div id="flowchart-0" class="flow-chart"></div>
+</li>
+</ul>
+</li>
+<li>
+<p>我曾对这块根据大后台的业务逻辑进行过改造, <code>models/menu</code>目录进行网络请求, 前端根据后台返回的<code>menu.json</code>进行菜单的渲染; 但是<code>Ant Design Pro</code>对这块的支持不够完整, 有些小问题, 最明显的就是<mark>动态路由菜单选中状态消失</mark>的问题; 加上后台服务的架构中,<code>auth</code>认证模块和用户信息模块的拆分, 没办法用一个请求既做认证又做用户信息获取, 所以最后我妥协了, 还是使用<code>Ant Design Pro</code>原有的路由方式; **这块算一个遗留问题吧, 有机会一定把这个坑填上; 目前如果后台需要角色权限划分, 前端代码是需要跟着变的; **</p>
+</li>
+<li>
+<p>权限这块, 我还对<code>src/utils/authority.js</code>进行了改造, 主要是对基础信息存储的逻辑进行了一些修改, 这块会在下面<span style="color:#fb7a08;font-weight:bold;">存储部分改造及应用</span>里详述;</p>
+</li>
+</ul>
+<h3 id="3-网络框架的定制及改造">3.网络框架的定制及改造</h3>
+<ul>
+<li><code>Ant Design Pro</code>的网络框架封装得很完善, 原始代码中使用<code>http</code>标准码进行业务逻辑判断, 根据返回码对路由的重定向也做的比较友好;</li>
+<li>在我们的业务中, 返回码分为基础码和业务逻辑码两个部分; 于是对<code>src/utils/request.js</code>里面从异常处理到<code>token</code>验证及刷新逻辑、到<code>REST</code>标准定义、到返回码的判断及返回信息的统一展示都进行了<span style="color:#fb7a08;font-weight:bold;">符合业务逻辑的更改</span>;</li>
+</ul>
+<h3 id="4-存储部分改造及应用">4.存储部分改造及应用</h3>
+<ul>
+<li><code>src/utils/authority.js</code>中原有存储是通过<code>localStorage</code>进行存储的, 出于安全性的考虑, 我把这块统一都修改为<code>sessionStorage</code>, 即关闭浏览器后, <code>authority</code>、<code>info</code>以及<code>token</code>都会清空; 并改造<code>setAuthority</code>方法, 把<code>access_token&amp;refresh_token&amp;token_type</code>等信息在此做了统一存储;</li>
+</ul>
+<h3 id="5-mock-的使用">5.mock 的使用</h3>
+<ul>
+<li>不得不说, <code>mock</code>的引入, 使得<code>Ant Design Pro</code>框架可以前后端开发并行, 项目开发前期我们所有的页面数据都是来自于<code>mock</code>, 自己写的假数据; 里面对<code>REST</code>的支持也很好, 还可以模拟网络请求延时, 基本上除了分页这类大量数据的逻辑, 都可以脱离后端进行开发; 开发过程中还可以通过<code>config/config.js</code>进行<code>proxy</code>配置, 使得真假数据混合使用, 大大提高了开发中调试的效率;</li>
+</ul>
+<h3 id="6-本地调试-线上部署的修改点及原因-包括Nginx配置解决方案">6.本地调试+线上部署的修改点及原因(包括<code>Nginx</code>配置解决方案)</h3>
+<ul>
+<li>
+<p>上面已经提到了, 前期开发使用的数据都是<code>mock</code>制造的, 开发过程中跟服务器的联调都是通过<code>config/config.js</code>中的<code>proxy</code>进行控制的;</p>
+</li>
+<li>
+<p>但是真正到了部署的时候, 发现了一个问题, 浏览器没法区分页面路由请求和后端数据请求; 它会把业务逻辑的网络请求默认识别成页面路由, 导致发送网络请求时, 页面直接定位到 403/404/500;</p>
+</li>
+<li>
+<p>这块我是通过<code>Nginx</code>配合解决的:</p>
+<ul>
+<li>
+<p>1.<code>src/services/api.js</code>中做了一个请求头, 写了一个<code>const</code>串, 让所有请求都以此开头, 调试的时候把它变成空字符串, 发布的时候打开注释; (还需要把<code>config/config.js</code>中的<code>history</code>的值改为<code>hash</code>, 这样页面路由在浏览器中会出现<code>xxx/#/xxx</code>格式, 以此区分页面路由请求/数据网络请求)</p>
+</li>
+<li>
+<ol start="2">
+<li><code>Nginx</code>中对前端攻城的<code>server</code>进行处理:</li>
+</ol>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /xxxxxx/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> https://api.xxxxxx.com/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">location</span>  / &#123;</span><br><span class="line">    <span class="attribute">root</span>   /xx/xx/nginx/html/shop;</span><br><span class="line">    <span class="attribute">index</span>  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>这样就把网络请求交给<code>nginx</code>, 让它根据请求头<code>xxxxxx</code>实现了服务的分发(<code>gateway</code>);</p>
+</li>
+</ul>
+<h3 id="7-其他杂七杂八的事情">7.其他杂七杂八的事情</h3>
+<ul>
+<li>
+<p>菜单隐藏</p>
+<ul>
+<li>
+<p>想隐藏详情页？没问题的, 一句话(<code>config/router.config.js</code>中对的菜单加上如下参数):</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hideInMenu: true</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>登录页的修改及默认登录页</p>
+<ul>
+<li><code>Ant Design Pro</code>的登录页藏在<code>src/components/Login</code>里面, 我们只有账号和密码登录, 所以对页面进行了一些改造;</li>
+<li>默认定位到登录页:
+<ul>
+<li>
+<ol>
+<li><code>/src/pages/Authorized.js</code>中<code>noMatch</code>的<code>Redirect</code>直接修改为<code>/account/login</code>, 不做<code>isLogin</code>的判断(即干掉访客模式)</li>
+</ol>
+</li>
+<li>2.<code>/config/router.config.js</code>中所有级别菜单都要加上<code>authority: [&quot;admin&quot;]</code>参数; 尤其是“/”(index 页面);</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>图片上传(<code>ant design</code>组件库问题)</p>
+<ul>
+<li><code>ant design</code>组件库对<code>upload</code>封装过于完整(是在骂它不是夸!), 可定制程度基本为 0; 它把从文件选择开始到网络请求结束的整个流程都封装起来了, 不过还好留了一个<code>beforeUpload</code>的拦截方法, 在这里面把上传的流程拦截下来, 直接获取<code>fileList</code>, 走我们自己的上传方法(没有用 <code>Ant Design Pro</code>的网络框架, 用<code>reqwest</code>重写的<code>post</code>方法);</li>
+</ul>
+</li>
+</ul>
+<h3 id="补充">补充~~~</h3>
+<ul>
+<li>
+<p>图片上传（添加图片裁剪）</p>
+<ul>
+<li>
+<p><code>ant design</code>的<code>upload</code>组件没有提供图片裁剪功能, 所以我们找到了<a target="_blank" rel="noopener" href="https://github.com/nanxiaobei/antd-img-crop">antd-img-crop</a>组件, 可以实现在上传前, 先对图片进行裁剪, 然后上传裁剪后的图片;</p>
+<ul>
+<li>使用方法:</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ImgCrop <span class="keyword">from</span> <span class="string">&quot;antd-img-crop&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Upload &#125; <span class="keyword">from</span> <span class="string">&quot;antd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Demo = <span class="function">() =&gt;</span> (</span><br><span class="line">  &lt;ImgCrop&gt;</span><br><span class="line">    &lt;Upload&gt;+ Add image&lt;/Upload&gt;</span><br><span class="line">  &lt;/ImgCrop&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>固定裁剪比例:(16:9 举例)<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// width type: number, default: 100(Crop&#x27;s width in px)</span></span><br><span class="line"><span class="comment">// height type: number, default: 100(Crop&#x27;s height in px)</span></span><br><span class="line">&lt;ImgCrop width:<span class="number">160</span> height:<span class="number">90</span>&gt;</span><br><span class="line">    &lt;Upload&gt;+ Add image&lt;/Upload&gt;</span><br><span class="line">&lt;/ImgCrop&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>坑:<code>antd-img-crop</code>组件与<code>upload</code>组件中的<code>beforeUpload</code>有冲突, 裁剪之后无法使用<code>beforeUpload</code>中自定义的上传方法, 因此我们改用<code>upload</code>组件自带的<code>action</code>进行上传在<code>onChange</code>中进行上传成功前和上传成功后的处理; 这种实现方式也解决了上传没有进度条的问题;<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在onChange方法中使用</span><br><span class="line"><span class="keyword">if</span> (file.response) &#123;...</span><br><span class="line">来判断文件状态</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>ant design</code>年选择器</p>
+<ul>
+<li>
+<p><code>ant design</code>的日期选择器<code>DatePicker</code>中, 包含<code>DatePicker</code>、<code>MonthPicker</code>、<code>RangePicker</code>、<code>WeekPicker</code>,唯独没有 <code>YearPicker</code>, 所以只能自己实现;</p>
+<ul>
+<li>
+<p>好消息: <code>DatePicker</code>有一个<code>mode</code>属性, 可以设置日期面板的状态, 其值为<code>year</code>时, 面板就变成“年选择”的格式了;</p>
+</li>
+<li>
+<p>坏消息: <code>mode</code>=&quot;year&quot;时, 点击面板中的值, 不生效;</p>
+<ul>
+<li>原因: 只要指定<code>mode</code>的值时, <code>&lt;DatePicker&gt;</code>的<code>onChange</code>方法就不会触发;</li>
+<li>解决方法:指定<code>onPanelChange</code>方法获取选中的值, 并关闭面板(使用<code>open</code>字段, 通过<code>state</code>控制面板显示/隐藏, <code>onOpenChange</code> 回调中要同步此<code>state</code>)</li>
+</ul>
+</li>
+<li>
+<p>Tip1:注意要记得把<code>format</code>设置为&quot;YYYY&quot;;</p>
+</li>
+<li>
+<p>Tip2:还是要实现<code>onChange</code>方法, 不然“清除按钮”不会生效;</p>
+</li>
+<li>
+<p>Tip3:<code>value</code>要指定<code>state</code>, 不然组件不受控;</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">示例</span><br><span class="line">&lt;DatePicker</span><br><span class="line">  mode=<span class="string">&quot;year&quot;</span></span><br><span class="line">  format=<span class="string">&quot;YYYY&quot;</span></span><br><span class="line">  placeholder=<span class="string">&quot;请选择年份&quot;</span></span><br><span class="line">  style=&#123;&#123; <span class="attr">marginLeft</span>: <span class="number">20</span>, <span class="attr">marginRight</span>: <span class="number">20</span>, <span class="attr">marginBottom</span>: <span class="number">20</span> &#125;&#125;</span><br><span class="line">  value=&#123;currentYearValue&#125;</span><br><span class="line">  open=&#123;isOpen&#125;</span><br><span class="line">  onChange=&#123;<span class="built_in">this</span>.handleChangeValue&#125;</span><br><span class="line">  onPanelChange=&#123;<span class="built_in">this</span>.handleSelectYearPicker&#125;</span><br><span class="line">  onOpenChange=&#123;<span class="built_in">this</span>.handleChangeOpenState&#125;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">    st=>start: admin角色登录
+    op1=>operation: 路由定位到admin权限页面
+    in1=>inputoutput: admin退出登录
+    in2=>inputoutput: user角色登录
+    op2=>operation: 自动刷新当前页面
+    end=>end: 403页面
+
+    st->op1->in1->in2->op2->end</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-%E8%87%B4%E6%95%ACAnt-Design-Pro%E5%BC%80%E5%8F%91%E8%80%85"><span class="toc-number">1.</span> <span class="toc-text">0.致敬Ant Design Pro开发者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%B7%A5%E7%A8%8B%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">1.工程结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Ant-Design-Pro%E7%9A%84%E8%B7%AF%E7%94%B1-%E5%9D%91%E3%80%81%E6%94%B9%E9%80%A0%E3%80%81%E4%BB%A5%E5%8F%8A%E5%9B%9E%E6%BB%9A"><span class="toc-number">3.</span> <span class="toc-text">2.Ant Design Pro的路由(坑、改造、以及回滚)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BD%91%E7%BB%9C%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%9A%E5%88%B6%E5%8F%8A%E6%94%B9%E9%80%A0"><span class="toc-number">4.</span> <span class="toc-text">3.网络框架的定制及改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%AD%98%E5%82%A8%E9%83%A8%E5%88%86%E6%94%B9%E9%80%A0%E5%8F%8A%E5%BA%94%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">4.存储部分改造及应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-mock-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">5.mock 的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%9C%AC%E5%9C%B0%E8%B0%83%E8%AF%95-%E7%BA%BF%E4%B8%8A%E9%83%A8%E7%BD%B2%E7%9A%84%E4%BF%AE%E6%94%B9%E7%82%B9%E5%8F%8A%E5%8E%9F%E5%9B%A0-%E5%8C%85%E6%8B%ACNginx%E9%85%8D%E7%BD%AE%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">7.</span> <span class="toc-text">6.本地调试+线上部署的修改点及原因(包括Nginx配置解决方案)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%85%B6%E4%BB%96%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB%E7%9A%84%E4%BA%8B%E6%83%85"><span class="toc-number">8.</span> <span class="toc-text">7.其他杂七杂八的事情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A5%E5%85%85"><span class="toc-number">9.</span> <span class="toc-text">补充~~~</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&text=Ant Design Pro改造"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&is_video=false&description=Ant Design Pro改造"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ant Design Pro改造&body=Check out this article: https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&title=Ant Design Pro改造"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&name=Ant Design Pro改造&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2018/12/30/Ant%20Design%20Pro%E6%94%B9%E9%80%A0/&t=Ant Design Pro改造"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

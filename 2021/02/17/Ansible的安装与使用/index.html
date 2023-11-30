@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="安装 配置 命令集  说明 格式   常用命令  模块信息 列举主机 主机连通性测试 常用模块      Ansible 是一个自动化运维工具, 可以用来同时对多台服务器进行管理、部署、分发; 一般集群在200台服务器以内, 管理起来都完全没有压力; 超过200台服务器一般使用saltstack;  安装   环境准备 1yum install epel-release   安装 1yum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ansible的安装与使用">
+<meta property="og:url" content="https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="安装 配置 命令集  说明 格式   常用命令  模块信息 列举主机 主机连通性测试 常用模块      Ansible 是一个自动化运维工具, 可以用来同时对多台服务器进行管理、部署、分发; 一般集群在200台服务器以内, 管理起来都完全没有压力; 超过200台服务器一般使用saltstack;  安装   环境准备 1yum install epel-release   安装 1yum">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-02-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-06-29T14:28:47.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Ansible的安装与使用</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/02/18/Flutter%E9%85%8D%E7%BD%AE&%E9%97%AE%E9%A2%98/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/02/14/VSCode%E5%B8%B8%E7%94%A8%E8%AE%BE%E7%BD%AE%E5%8F%8A%E4%BB%A3%E7%A0%81%E5%9D%97/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&text=Ansible的安装与使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&is_video=false&description=Ansible的安装与使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ansible的安装与使用&body=Check out this article: https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&name=Ansible的安装与使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&t=Ansible的安装与使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">命令集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">3.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF"><span class="toc-number">4.1.</span> <span class="toc-text">模块信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E4%B8%BE%E4%B8%BB%E6%9C%BA"><span class="toc-number">4.2.</span> <span class="toc-text">列举主机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E8%BF%9E%E9%80%9A%E6%80%A7%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.</span> <span class="toc-text">主机连通性测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="toc-number">4.4.</span> <span class="toc-text">常用模块</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Ansible的安装与使用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-16T16:00:00.000Z" itemprop="datePublished">2021-02-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE">配置</a></li>
+<li><a href="#%E5%91%BD%E4%BB%A4%E9%9B%86">命令集</a>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明</a></li>
+<li><a href="#%E6%A0%BC%E5%BC%8F">格式</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a>
+<ul>
+<li><a href="#%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF">模块信息</a></li>
+<li><a href="#%E5%88%97%E4%B8%BE%E4%B8%BB%E6%9C%BA">列举主机</a></li>
+<li><a href="#%E4%B8%BB%E6%9C%BA%E8%BF%9E%E9%80%9A%E6%80%A7%E6%B5%8B%E8%AF%95">主机连通性测试</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97">常用模块</a></li>
+</ul>
+</li>
+</ul>
+<!-- /code_chunk_output -->
+<blockquote>
+<p><code>Ansible</code> 是一个自动化运维工具, 可以用来同时对多台服务器进行管理、部署、分发;<br>
+一般集群在<code>200</code>台服务器以内, 管理起来都完全没有压力;<br>
+超过<code>200</code>台服务器一般使用<code>saltstack</code>;</p>
+</blockquote>
+<h3 id="安装">安装</h3>
+<ul>
+<li>
+<p>环境准备</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install ansible</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>目录说明</p>
+<table>
+<thead>
+<tr>
+<th>说明</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>配置文件目录</td>
+<td>/etc/ansible/</td>
+</tr>
+<tr>
+<td>执行文件目录</td>
+<td>/usr/bin/</td>
+</tr>
+<tr>
+<td>Lib 库依赖目录</td>
+<td>/usr/lib/pythonX.X/site-packages/ansible/</td>
+</tr>
+<tr>
+<td>Help 文档目录</td>
+<td>/usr/share/doc/ansible-X.X.X/</td>
+</tr>
+<tr>
+<td>Man 文档目录</td>
+<td>/usr/share/man/man1/</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="配置">配置</h3>
+<ul>
+<li>
+<p>配置文件查找顺序</p>
+<blockquote>
+<p>如果使用中发现有问题, 逐个去排查看是不是有冲突的配置;</p>
+</blockquote>
+<ul>
+<li>
+<ol>
+<li>环境变量 ANSIBLE_CONFIG</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>~/.ansible.cfg</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>/etc/ansible.cfg</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>配置文件<code>/etc/ansible/ansible.cfg</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这个参数表示资源清单inventory文件的位置</span></span><br><span class="line">inventory = /etc/ansible/hosts</span><br><span class="line"><span class="comment">#指向存放Ansible模块的目录，支持多个目录方式，只要用冒号（：）隔开就可以</span></span><br><span class="line">library = /usr/share/ansible</span><br><span class="line"><span class="comment">#并发连接数，默认为5</span></span><br><span class="line">forks = 5</span><br><span class="line"><span class="comment">#设置默认执行命令的用户</span></span><br><span class="line">sudo_user = root</span><br><span class="line"><span class="comment">#指定连接被管节点的管理端口，默认为22端口，建议修改，能够更加安全</span></span><br><span class="line">remote_port = 22</span><br><span class="line"><span class="comment">#设置是否检查SSH主机的密钥，值为True/False。关闭后第一次连接不会提示配置实例</span></span><br><span class="line">host_key_checking = False</span><br><span class="line"><span class="comment">#设置SSH连接的超时时间，单位为秒</span></span><br><span class="line">timeout = 60</span><br><span class="line"><span class="comment">#指定一个存储ansible日志的文件（默认不记录日志）</span></span><br><span class="line">log_path = /var/<span class="built_in">log</span>/ansible.log</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>主机清单<code>/etc/ansible/hosts</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[works]</span><br><span class="line">192.168.1.2</span><br><span class="line">172.11.1.2</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line">[组名]</span><br><span class="line">IP/域名</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+<ul>
+<li><span style="color:#fb7a08;font-weight:bold;">如果组名是数字开头的, 在使用的时候会出现警告<code>Invalid characters were found in group names but not replaced</code>, 但不影响使用;</span></li>
+</ul>
+</li>
+</ul>
+<h3 id="命令集">命令集</h3>
+<h4 id="说明">说明</h4>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/usr/bin/ansible</td>
+<td>Ansibe AD-Hoc 临时命令执行工具，常用于临时命令的执行</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-doc</td>
+<td>Ansible 模块功能查看工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-galaxy</td>
+<td>下载/上传优秀代码或 Roles 模块 的官网平台，基于网络的</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-playbook</td>
+<td>Ansible 定制自动化的任务集编排工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-pull</td>
+<td>Ansible 远程执行命令的工具，拉取配置而非推送配置（使用较少，海量机器时使用，对运维的架构能力要求较高）</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-vault</td>
+<td>Ansible 文件加密工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-console</td>
+<td>Ansible 基于 Linux Consoble 界面可与用户交互的命令执行工具</td>
+</tr>
+</tbody>
+</table>
+<h4 id="格式">格式</h4>
+<ul>
+<li>
+<p>格式说明</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible &lt;host-pattern&gt; [-f forks] [-m module_name] [-a args]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>详细</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a MODULE_ARGS</td>
+<td>模块的参数，如果执行默认 COMMAND 的模块，即是命令参数，如： “date”，“pwd”等等</td>
+</tr>
+<tr>
+<td>-k，–ask-pass</td>
+<td>ask for SSH password。登录密码，提示输入 SSH 密码而不是假设基于密钥的验证</td>
+</tr>
+<tr>
+<td>–ask-su-pass</td>
+<td>ask for su password。su 切换密码</td>
+</tr>
+<tr>
+<td>-K，–ask-sudo-pass</td>
+<td>ask for sudo password。提示密码使用 sudo，sudo 表示提权操作</td>
+</tr>
+<tr>
+<td>–ask-vault-pass</td>
+<td>ask for vault password。假设我们设定了加密的密码，则用该选项进行访问</td>
+</tr>
+<tr>
+<td>-B SECONDS</td>
+<td>后台运行超时时间</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>模拟运行环境并进行预运行，可以进行查错测试</td>
+</tr>
+<tr>
+<td>-c CONNECTION</td>
+<td>连接类型使用</td>
+</tr>
+<tr>
+<td>-f FORKS</td>
+<td>并行任务数，默认为 5</td>
+</tr>
+<tr>
+<td>-i INVENTORY</td>
+<td>指定主机清单的路径，默认为/etc/ansible/hosts</td>
+</tr>
+<tr>
+<td>–list-hosts</td>
+<td>查看有哪些主机组</td>
+</tr>
+<tr>
+<td>-m MODULE_NAME</td>
+<td>执行模块的名字，默认使用 command 模块，所以如果是只执行单一命令可以不用 -m 参数</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>压缩输出，尝试将所有结果在一行输出，一般针对收集工具使用</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>用 su 命令</td>
+</tr>
+<tr>
+<td>-R SU_USER</td>
+<td>指定 su 的用户，默认为 root 用户</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>用 sudo 命令</td>
+</tr>
+<tr>
+<td>-U SUDO_USER</td>
+<td>指定 sudo 到哪个用户，默认为 root 用户</td>
+</tr>
+<tr>
+<td>-T TIMEOUT</td>
+<td>指定 ssh 默认超时时间，默认为 10s，也可在配置文件中修改</td>
+</tr>
+<tr>
+<td>-u REMOTE_USER</td>
+<td>远程用户，默认为 root 用户</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>查看详细信息，同时支持-vvv，-vvvv 可查看更详细信息</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h3 id="常用命令">常用命令</h3>
+<h4 id="模块信息">模块信息</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#获取全部模块的信息</span></span><br><span class="line">ansible-doc -l</span><br><span class="line"><span class="comment">#获取指定模块的使用帮助</span></span><br><span class="line">ansible-doc -s MOD_NAME</span><br></pre></td></tr></table></figure>
+<h4 id="列举主机">列举主机</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ansible &lt;组名&gt;/all --list</span><br><span class="line"><span class="comment">#例:ansible group1 --list</span></span><br></pre></td></tr></table></figure>
+<h4 id="主机连通性测试">主机连通性测试</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ansible &lt;组名&gt;/all -m ping</span><br></pre></td></tr></table></figure>
+<h4 id="常用模块">常用模块</h4>
+<blockquote>
+<p>可以用<code>ansible-doc -s MOD_NAME</code>查看具体用法;</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>command</td>
+<td>在远程主机上执行命令, 并将结果返回本主机(注意该命令不支持管道)</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>在远程主机上调用 <code>shell</code> 解释器运行命令, 支持 <code>shell</code> 的各种功能, 例如管道等</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>将文件复制到远程主机, 同时支持给定内容生成文件和修改权限等</td>
+</tr>
+<tr>
+<td>synchronize</td>
+<td>同步模块, 功能与 <code>copy</code> 模块类似, 比 <code>copy</code> 要强大一些, 速度也更快, 但是默认需要系统支持<code>rsync</code>, 用哪个看自己需求</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>从远程某主机获取(复制)文件到本地</td>
+</tr>
+<tr>
+<td>yum</td>
+<td>远程安装</td>
+</tr>
+<tr>
+<td>script</td>
+<td>用于将本机的脚本在被管理端的机器上运行</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<ul>
+<li>参考链接
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/keerya/p/7987886.html">https://www.cnblogs.com/keerya/p/7987886.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/wudinaniya/article/details/98988345">https://blog.csdn.net/wudinaniya/article/details/98988345</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">命令集</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">3.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F"><span class="toc-number">3.2.</span> <span class="toc-text">格式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF"><span class="toc-number">4.1.</span> <span class="toc-text">模块信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%97%E4%B8%BE%E4%B8%BB%E6%9C%BA"><span class="toc-number">4.2.</span> <span class="toc-text">列举主机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E6%9C%BA%E8%BF%9E%E9%80%9A%E6%80%A7%E6%B5%8B%E8%AF%95"><span class="toc-number">4.3.</span> <span class="toc-text">主机连通性测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="toc-number">4.4.</span> <span class="toc-text">常用模块</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&text=Ansible的安装与使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&is_video=false&description=Ansible的安装与使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Ansible的安装与使用&body=Check out this article: https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&title=Ansible的安装与使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&name=Ansible的安装与使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/02/17/Ansible%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/&t=Ansible的安装与使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

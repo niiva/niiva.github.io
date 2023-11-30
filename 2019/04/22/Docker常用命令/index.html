@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="基本操作 镜像操作 容器操作 持久卷操作 Dockerfile  原版镜像 自定义镜像 1.0 自定义镜像 1.1 小结     基本操作   查看Docker版本信息 1docker version   查看Dcoker系统信息(镜像、容器等) 1docker info   镜像操作   列出本地镜像 1docker images   搜索镜像 12docker search &lt;im">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker常用命令">
+<meta property="og:url" content="https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="基本操作 镜像操作 容器操作 持久卷操作 Dockerfile  原版镜像 自定义镜像 1.0 自定义镜像 1.1 小结     基本操作   查看Docker版本信息 1docker version   查看Dcoker系统信息(镜像、容器等) 1docker info   镜像操作   列出本地镜像 1docker images   搜索镜像 12docker search &lt;im">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-04-01T09:06:32.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Docker常用命令</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/05/03/Nginx%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/04/10/Docker%E5%AE%89%E8%A3%85/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&text=Docker常用命令"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&is_video=false&description=Docker常用命令"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker常用命令&body=Check out this article: https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&name=Docker常用命令&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&t=Docker常用命令"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">镜像操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">容器操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8D%B7%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">持久卷操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">5.</span> <span class="toc-text">Dockerfile</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%89%88%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.</span> <span class="toc-text">原版镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-1-0"><span class="toc-number">5.2.</span> <span class="toc-text">自定义镜像 1.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-1-1"><span class="toc-number">5.3.</span> <span class="toc-text">自定义镜像 1.1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.4.</span> <span class="toc-text">小结</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Docker常用命令
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-04-21T16:00:00.000Z" itemprop="datePublished">2019-04-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">基本操作</a></li>
+<li><a href="#%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C">镜像操作</a></li>
+<li><a href="#%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C">容器操作</a></li>
+<li><a href="#%E6%8C%81%E4%B9%85%E5%8D%B7%E6%93%8D%E4%BD%9C">持久卷操作</a></li>
+<li><a href="#dockerfile">Dockerfile</a>
+<ul>
+<li><a href="#%E5%8E%9F%E7%89%88%E9%95%9C%E5%83%8F">原版镜像</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-10">自定义镜像 1.0</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-11">自定义镜像 1.1</a></li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
+</ul>
+</li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="基本操作">基本操作</h3>
+<ul>
+<li>
+<p>查看<code>Docker</code>版本信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看<code>Dcoker</code>系统信息(镜像、容器等)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker info</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="镜像操作">镜像操作</h3>
+<ul>
+<li>
+<p>列出本地镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>搜索镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker search &lt;image&gt;</span><br><span class="line"><span class="comment"># 例如 docker search nginx</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>拉取镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker pull &lt;image&gt;</span><br><span class="line"><span class="comment"># 例如</span></span><br><span class="line"><span class="comment"># docker pull nginx</span></span><br><span class="line"><span class="comment"># docker pull jwilder/nginx-proxy</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除单个镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker rmi &lt;image&gt;</span><br><span class="line"><span class="comment"># 例如 docker rmi jwilder/nginx-proxy</span></span><br><span class="line"><span class="comment"># 参数也可以为&lt;image id&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除多个镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 镜像名称用空格隔开</span></span><br><span class="line">docker rmi &lt;image1&gt; &lt;image2&gt; ...</span><br><span class="line"><span class="comment"># 例如 docker rmi jwilder/nginx-proxy nginx</span></span><br><span class="line"><span class="comment"># 参数也可以为&lt;image id&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除全部镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 其原理是用docker images的结果作为删除参数</span></span><br><span class="line">docker rmi $(docker images -qa)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="容器操作">容器操作</h3>
+<ul>
+<li>
+<p>列出正在运行的容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker ps -a显示所有容器, 包括已经停止的</span></span><br><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看容器详细信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker inspect &lt;container id&gt;</span><br><span class="line"><span class="comment"># 如 docker inspect c510bb0bf172</span></span><br><span class="line"><span class="comment"># id可以简写(比如id为c510bb0bf172)</span></span><br><span class="line"><span class="comment"># 可以写成docker inspect c51(确保c51唯一就可以)</span></span><br><span class="line"><span class="comment"># 【下面命令同理】</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建并运行容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run &lt;option&gt; &lt;image&gt; &lt;<span class="built_in">command</span>&gt;</span><br><span class="line"><span class="comment"># 例</span></span><br><span class="line"><span class="comment"># docker run -d --name jira \</span></span><br><span class="line"><span class="comment"># --restart always \</span></span><br><span class="line"><span class="comment"># -p 8091:8080 \</span></span><br><span class="line"><span class="comment"># -v jira_data:/var/atlassian/jira \</span></span><br><span class="line"><span class="comment"># -v /etc/localtime:/etc/localtime \</span></span><br><span class="line"><span class="comment"># -v /etc/timezone:/etc/timezone \</span></span><br><span class="line"><span class="comment"># jira/jira:latest</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>常用参数及说明</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code></td>
+<td>后台运行(守护进程)</td>
+</tr>
+<tr>
+<td><code>--name</code></td>
+<td>容器名称</td>
+</tr>
+<tr>
+<td><code>--restart</code></td>
+<td>重新启动在容器退出时应用的策略</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>指定运行端口&lt;宿主机端口&gt;:&lt;容器内端口&gt;</td>
+</tr>
+<tr>
+<td><code>-v</code></td>
+<td>卷映射&lt;宿主机目录/文件&gt;/&lt;持久卷名称&gt;:&lt;容器目录/文件&gt;</td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td>设置容器使用内存最大值</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p>启动容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker start &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker start c51</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>重启容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker restart &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker restart c51</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>停止容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker stop &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker stop c51</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>强制停止容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">kill</span> &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker kill c51</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除容器(容器需要已停止)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker rm &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker rm c51</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>容器内执行命令并返回结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> &lt;container id&gt; &lt;<span class="built_in">command</span>&gt;</span><br><span class="line"><span class="comment"># 例 docker exec c51 ls /var</span></span><br><span class="line"><span class="comment"># 查看容器内/var目录</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>进入容器(可交互命令行模式)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it &lt;container id&gt; bash</span><br><span class="line"><span class="comment"># 例 docker exec -it c51 bash</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看容器内运行的进程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker top &lt;container id&gt;</span><br><span class="line"><span class="comment"># 例 docker top c51</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker logs -f -t --tail &lt;count&gt; &lt;container id&gt;</span><br><span class="line"><span class="comment"># 如 docker logs -f -t --tail 5 c51</span></span><br><span class="line"><span class="comment"># 输出c51容器的5条日志</span></span><br><span class="line"><span class="comment"># -f【实时查看】</span></span><br><span class="line"><span class="comment"># -t【带时间戳】</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>拷贝文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker cp &lt;container id&gt;:&lt;容器路径&gt; &lt;宿主机路径&gt;</span><br><span class="line"><span class="comment"># 如 docker cp c51:/var/logs/1.log /temp/1.log</span></span><br><span class="line"><span class="comment"># 从c51容器内将/var/logs/1.log拷贝到宿主机/temp/1.log</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="持久卷操作">持久卷操作</h3>
+<ul>
+<li>
+<p>查看全部持久卷</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume list</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看持久卷详细信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker inspect &lt;volume name&gt;</span><br><span class="line"><span class="comment"># 例 docker inspect volume_test</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建持久卷</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create &lt;volume name&gt;</span><br><span class="line"><span class="comment"># 例 docker volume create volume_test</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除持久卷</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume remove &lt;volume name&gt;</span><br><span class="line"><span class="comment"># 例 docker volume remove test_volume</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Dockerfile">Dockerfile</h3>
+<h4 id="原版镜像">原版镜像</h4>
+<blockquote>
+<p>Dockerfile 是自定义镜像打包的配置文件;<br>
+这里我们以一个例子为切入(以<code>CentOS</code>的镜像为模板), 一步一步来熟悉;</p>
+</blockquote>
+<ul>
+<li>
+<p>拉取镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mycentos centos</span><br><span class="line"><span class="comment"># 68765eae1521</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>进入容器查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 68 bash</span><br><span class="line"><span class="comment"># 执行</span></span><br><span class="line">ifconfig</span><br><span class="line"><span class="comment"># 提示</span></span><br><span class="line">bash: ifconfig: <span class="built_in">command</span> not found</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="自定义镜像-1-0">自定义镜像 1.0</h4>
+<blockquote>
+<p>接下来我们自定义一个镜像, 让它拥有<code>ifconfig</code>模块;</p>
+</blockquote>
+<ul>
+<li>
+<p>编写<code>Dockerfile</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Custom CentOS Dockerfile1.0</span></span><br><span class="line">FROM centos</span><br><span class="line">RUN yum -y install net-tools</span><br><span class="line">CMD [<span class="string">&quot;/bin/bash&quot;</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>构建自定义镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注意命令最后后面有个&quot;.&quot;</span></span><br><span class="line">docker build -f Dockerfile -t mycentos:1.0 .</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>运行自定义镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mycentos mycentos:1.0</span><br><span class="line"><span class="comment"># 76e84326247f</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>进入容器查看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 76 bash</span><br><span class="line"><span class="comment"># 执行</span></span><br><span class="line">ifconfig</span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">      inet 172.17.0.2  netmask 255.255.0.0  broadcast 172.17.255.255</span><br><span class="line">      ether 02:42:ac:11:00:02  txqueuelen 0  (Ethernet)</span><br><span class="line">      RX packets 10  bytes 876 (876.0 B)</span><br><span class="line">      RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">      TX packets 0  bytes 0 (0.0 B)</span><br><span class="line">      TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line">lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt; mtu 65536</span><br><span class="line">      inet 127.0.0.1 netmask 255.0.0.0</span><br><span class="line">      loop txqueuelen 1000 (Local Loopback)</span><br><span class="line">      RX packets 0 bytes 0 (0.0 B)</span><br><span class="line">      RX errors 0 dropped 0 overruns 0 frame 0</span><br><span class="line">      TX packets 0 bytes 0 (0.0 B)</span><br><span class="line">      TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="自定义镜像-1-1">自定义镜像 1.1</h4>
+<blockquote>
+<p>至此, 我们就得到了一个带有<code>net-tools</code>模块的<code>CentOS</code>容器;<br>
+接下来我们做一个例子, 使用本地文件安装<code>webpy</code>模块, 并启动一个服务;</p>
+</blockquote>
+<ul>
+<li>
+<p>编写<code>Dockerfile</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Custom python Dockerfile1.1</span></span><br><span class="line">FROM python</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将当前目录下的webpy-0.61.tar打包到镜像/test目录</span></span><br><span class="line">ADD webpy-0.61.tar /<span class="built_in">test</span>/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装webpy模块</span></span><br><span class="line">WORKDIR /<span class="built_in">test</span>/webpy-0.61</span><br><span class="line">RUN python /<span class="built_in">test</span>/webpy-0.61/setup.py install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制当前目录文本readme.txt到镜像/test目录</span></span><br><span class="line">COPY test.py /<span class="built_in">test</span>/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器运行时监听的端口</span></span><br><span class="line">EXPOSE  8080</span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器运行时执行</span></span><br><span class="line">CMD [<span class="string">&quot;python&quot;</span>,<span class="string">&quot;/test/test.py&quot;</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>Python 脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test.py</span></span><br><span class="line"><span class="keyword">import</span> web</span><br><span class="line"></span><br><span class="line">urls = (</span><br><span class="line">    <span class="string">&#x27;/(.*)&#x27;</span>, <span class="string">&#x27;hello&#x27;</span></span><br><span class="line">)</span><br><span class="line">app = web.application(urls, <span class="built_in">globals</span>())</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">hello</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">GET</span>(<span class="params">self, name</span>):</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> name:</span><br><span class="line">            name = <span class="string">&#x27;World&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Hello, &#x27;</span> + name + <span class="string">&#x27;!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>构建自定义镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -f Dockerfile -t mypython:1.1 .</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>运行自定义镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd \</span><br><span class="line">-p 9999:8080 \</span><br><span class="line">--name mypython mypython:1.1</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看</p>
+<ul>
+<li>浏览器中打开 <a target="_blank" rel="noopener" href="http://localhost:9999">http://localhost:9999</a> 就可以看到<code>hello world</code>了;</li>
+</ul>
+</li>
+</ul>
+<h4 id="小结">小结</h4>
+<ul>
+<li>
+<p>下面来解释一下 Dockerfile 里面的各种常用参数:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FROM</td>
+<td>基础镜像, 当前新镜像是基于哪个镜像的</td>
+</tr>
+<tr>
+<td>RUN</td>
+<td>容器构建时需要运行的命令<span style="color:#fb7a08;font-weight:bold;">【需要注意的是每一行 RUN 指令都会在 docker 上新建一层, 一般使用<code>&amp;&amp;</code>符号把多行命令连接起来, 保证只有一个 RUN 指令】</span></td>
+</tr>
+<tr>
+<td>EXPOSE</td>
+<td>当前容器对外暴露出的端口<span style="color:#fb7a08;font-weight:bold;">【EXPOSE 指令是声明运行时容器提供服务端口, 这只是一个声明, 在运行时并不会因为这个声明应用就会开启这个端口的服务; 在 Dockerfile 中写入这样的声明有两个好处, 一个是帮助镜像使用者理解这个镜像服务的守护端口, 以方便配置映射; 另一个用处则是在运行时使用随机端口映射时, 也就是 docker run -P 时, 会自动随机映射 EXPOSE 的端口;】</span></td>
+</tr>
+<tr>
+<td>WORKDIR</td>
+<td>WORKDIR 指令为 Dockerfile 中的 <code>RUN</code>指令设置工作目录<span style="color:#fb7a08;font-weight:bold;">【举个例子, 比如上面的<code>webpy安装包</code>里面有<code>../xxx</code>的写法, 如果不指定工作目录, 则会提示<code>找不到xxx文件夹</code>的错误】</span></td>
+</tr>
+<tr>
+<td>ADD</td>
+<td>对目标镜像进行文件/目录的添加, <code>ADD</code> 命令会自动处理 <code>URL</code> 和解压 <code>tar</code> 压缩包</td>
+</tr>
+<tr>
+<td>COPY</td>
+<td>类似 <code>ADD</code>, 拷贝文件和目录到镜像中, 但是不能添添加网络文件(<code>URL</code>)</td>
+</tr>
+<tr>
+<td>CMD</td>
+<td>知道一个容器启动需要运行的命令, <code>Dockerfile</code> 中可以有多个 <code>CMD</code> 指令, 但只有最后一个生效, <code>CMD</code> 会被 <code>docker run</code> 之后的参数替换</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<hr>
+<ul>
+<li>
+<p>参考</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/dwlovelife/category/1542443.html">https://www.cnblogs.com/dwlovelife/category/1542443.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.hxstrive.com/article/651.htm">https://www.hxstrive.com/article/651.htm</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.runoob.com/docker/docker-dockerfile.html">https://www.runoob.com/docker/docker-dockerfile.html</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">1.</span> <span class="toc-text">基本操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">镜像操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">容器操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8D%B7%E6%93%8D%E4%BD%9C"><span class="toc-number">4.</span> <span class="toc-text">持久卷操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dockerfile"><span class="toc-number">5.</span> <span class="toc-text">Dockerfile</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%89%88%E9%95%9C%E5%83%8F"><span class="toc-number">5.1.</span> <span class="toc-text">原版镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-1-0"><span class="toc-number">5.2.</span> <span class="toc-text">自定义镜像 1.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F-1-1"><span class="toc-number">5.3.</span> <span class="toc-text">自定义镜像 1.1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.4.</span> <span class="toc-text">小结</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&text=Docker常用命令"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&is_video=false&description=Docker常用命令"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Docker常用命令&body=Check out this article: https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Docker常用命令"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&name=Docker常用命令&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/04/22/Docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&t=Docker常用命令"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

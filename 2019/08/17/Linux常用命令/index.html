@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="远程登录 开关机命令 文件及目录操作 磁盘命令 vi&#x2F;vim 远程拷贝 查看进程 查看端口 进程守护 定时任务 资源占用 管道(筛选) 压缩解压 查找 其他常用  Find 的妙用 软连接 Ubuntu 默认 root 账户不能 SSH 登录问题 查看软硬件信息 让 CPU 负载 100%   系统目录结构   远程登录   ssh 命令   账号密码登录 12345678910ssh [u">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常用命令">
+<meta property="og:url" content="https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="远程登录 开关机命令 文件及目录操作 磁盘命令 vi&#x2F;vim 远程拷贝 查看进程 查看端口 进程守护 定时任务 资源占用 管道(筛选) 压缩解压 查找 其他常用  Find 的妙用 软连接 Ubuntu 默认 root 账户不能 SSH 登录问题 查看软硬件信息 让 CPU 负载 100%   系统目录结构   远程登录   ssh 命令   账号密码登录 12345678910ssh [u">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-17T09:28:55.000Z">
+<meta property="article:modified_time" content="2023-10-24T04:16:25.837Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Linux常用命令</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2020/03/22/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&text=Linux常用命令"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&is_video=false&description=Linux常用命令"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux常用命令&body=Check out this article: https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&name=Linux常用命令&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&t=Linux常用命令"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">远程登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%85%B3%E6%9C%BA%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">开关机命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">文件及目录操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">磁盘命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vi-vim"><span class="toc-number">5.</span> <span class="toc-text">vi&#x2F;vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%8B%B7%E8%B4%9D"><span class="toc-number">6.</span> <span class="toc-text">远程拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3"><span class="toc-number">8.</span> <span class="toc-text">查看端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4"><span class="toc-number">9.</span> <span class="toc-text">进程守护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1"><span class="toc-number">10.</span> <span class="toc-text">定时任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%8D%A0%E7%94%A8"><span class="toc-number">11.</span> <span class="toc-text">资源占用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93-%E7%AD%9B%E9%80%89"><span class="toc-number">12.</span> <span class="toc-text">管道(筛选)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B"><span class="toc-number">13.</span> <span class="toc-text">压缩解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE"><span class="toc-number">14.</span> <span class="toc-text">查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8"><span class="toc-number">15.</span> <span class="toc-text">其他常用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Find-%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">15.1.</span> <span class="toc-text">Find 的妙用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.2.</span> <span class="toc-text">软连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu-%E9%BB%98%E8%AE%A4-root-%E8%B4%A6%E6%88%B7%E4%B8%8D%E8%83%BD-SSH-%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98"><span class="toc-number">15.3.</span> <span class="toc-text">Ubuntu 默认 root 账户不能 SSH 登录问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BD%AF%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">15.4.</span> <span class="toc-text">查看软硬件信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A9-CPU-%E8%B4%9F%E8%BD%BD-100"><span class="toc-number">15.5.</span> <span class="toc-text">让 CPU 负载 100%</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">16.</span> <span class="toc-text">系统目录结构</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Linux常用命令
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-17T09:28:55.000Z" itemprop="datePublished">2019-08-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95">远程登录</a></li>
+<li><a href="#%E5%BC%80%E5%85%B3%E6%9C%BA%E5%91%BD%E4%BB%A4">开关机命令</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C">文件及目录操作</a></li>
+<li><a href="#%E7%A3%81%E7%9B%98%E5%91%BD%E4%BB%A4">磁盘命令</a></li>
+<li><a href="#vivim">vi/vim</a></li>
+<li><a href="#%E8%BF%9C%E7%A8%8B%E6%8B%B7%E8%B4%9D">远程拷贝</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B">查看进程</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3">查看端口</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4">进程守护</a></li>
+<li><a href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1">定时任务</a></li>
+<li><a href="#%E8%B5%84%E6%BA%90%E5%8D%A0%E7%94%A8">资源占用</a></li>
+<li><a href="#%E7%AE%A1%E9%81%93%E7%AD%9B%E9%80%89">管道(筛选)</a></li>
+<li><a href="#%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B">压缩解压</a></li>
+<li><a href="#%E6%9F%A5%E6%89%BE">查找</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8">其他常用</a>
+<ul>
+<li><a href="#find-%E7%9A%84%E5%A6%99%E7%94%A8">Find 的妙用</a></li>
+<li><a href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5">软连接</a></li>
+<li><a href="#ubuntu-%E9%BB%98%E8%AE%A4-root-%E8%B4%A6%E6%88%B7%E4%B8%8D%E8%83%BD-ssh-%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98">Ubuntu 默认 root 账户不能 SSH 登录问题</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B%E8%BD%AF%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF">查看软硬件信息</a></li>
+<li><a href="#%E8%AE%A9-cpu-%E8%B4%9F%E8%BD%BD-100">让 CPU 负载 100%</a></li>
+</ul>
+</li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">系统目录结构</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="远程登录">远程登录</h3>
+<ul>
+<li>
+<p>ssh 命令</p>
+<ul>
+<li>
+<p>账号密码登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ssh [username]@[serverip]</span><br><span class="line"></span><br><span class="line"><span class="comment">#ssh默认端口22, 如果服务器更改了ssh连接端口, 需用下面命令:</span></span><br><span class="line"></span><br><span class="line">ssh -p [port] [username]@[serverip]</span><br><span class="line"></span><br><span class="line"><span class="comment">#[username]对应要登录的远程服务器上的用户名</span></span><br><span class="line"><span class="comment">#[serverip]对应要登录的远程服务器ip地址</span></span><br><span class="line"><span class="comment">#[port]对应要登录的远程服务器修改过的ssh连接端口</span></span><br><span class="line"><span class="comment">#按下回车之后会要求输入密码, 输入结果不可见, 但密码错误会有提示;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>证书登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i /xxx/id_rsa username@&lt;ssh_server_ip&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>证书登录的详细配置详见<a href="https://www.jindu.link/2019/08/05/SSH%E7%AE%80%E6%98%93%E8%BF%9E%E6%8E%A5%E9%85%8D%E7%BD%AE/">SSH简易连接配置</a>；</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>清除 Keychain</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#如远程服务器更换系统、ip重新绑定等情况, 会提示:</span></span><br><span class="line"><span class="comment">#WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!</span></span><br><span class="line">ssh-keygen -R [ip]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="开关机命令">开关机命令</h3>
+<ul>
+<li>
+<p>关机/重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将数据由内存同步到硬盘中;</span></span><br><span class="line">sync</span><br><span class="line"></span><br><span class="line"><span class="comment">#这个命令告诉大家, 计算机将在10分钟后关机, 并且会显示在登陆用户的当前屏幕中;</span></span><br><span class="line">shutdown –h 10 ‘This server will shutdown after 10 mins’</span><br><span class="line"></span><br><span class="line"><span class="comment">#立马关机</span></span><br><span class="line">shutdown –h now</span><br><span class="line"></span><br><span class="line"><span class="comment">#系统会在今天20:25关机</span></span><br><span class="line">shutdown –h 20:25</span><br><span class="line"></span><br><span class="line"><span class="comment">#/ 十分钟后关机</span></span><br><span class="line">shutdown –h +10</span><br><span class="line"></span><br><span class="line"><span class="comment">#系统立马重启</span></span><br><span class="line">shutdown –r now</span><br><span class="line"></span><br><span class="line"><span class="comment">#系统十分钟后重启</span></span><br><span class="line">shutdown –r +10</span><br><span class="line"></span><br><span class="line"><span class="comment">#就是重启, 等同于 shutdown –r now</span></span><br><span class="line">reboot</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭系统, 等同于shutdown –h now 和 poweroff</span></span><br><span class="line">halt</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><span style="color:#fb7a08;font-weight:bold;">不管是重启系统还是关闭系统, 首先要运行<code>sync</code>命令, 把内存中的数据写到磁盘中;</span></p>
+<hr>
+<h3 id="文件及目录操作">文件及目录操作</h3>
+<ul>
+<li>
+<p>首先要知道<code>linux</code>下的文件及目录都有属性这个概念, 读/写/执行, 通常情况下都用<code>chmod+3个数字</code>来变更文件权限;</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r</code></td>
+<td><code>read</code>读 对应权限编号 4</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td><code>write</code>写 对应权限编号 2</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>execute</code>可执行 对应权限编号 1</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一个数字</td>
+<td>表示文件所有者的权限</td>
+</tr>
+<tr>
+<td>第二个数字</td>
+<td>表示与文件所有者同属一个用户组的其他用户的权限</td>
+</tr>
+<tr>
+<td>第三个数字</td>
+<td>表示其它用户组的权限</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#例: 所有用户最高权限</span></span><br><span class="line">chmod 777 /xx/xx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>当前目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pwd</span></span><br><span class="line"><span class="comment">#会输出当前目录, 比如现在在根目录, 那么执行之后会输出&quot;/&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列出当前目录及文件名</span></span><br><span class="line">ls</span><br><span class="line"></span><br><span class="line"><span class="comment">#-a : 全部的文件, 连同隐藏文件( 开头为 . 的文件) 一起列出来(常用)</span></span><br><span class="line"><span class="comment">#-d : 仅列出目录本身, 而不是列出目录内的文件数据(常用)</span></span><br><span class="line"><span class="comment">#-l : 长数据串列出, 包含文件的属性与权限等等数据；(常用)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#ls命令后面加路径, 会列出指定目录下的目录及文件,</span></span><br><span class="line"><span class="comment">#比如现在在/home/test下, 想查看/usr下的目录及文件</span></span><br><span class="line">ls /usr</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>跳转</p>
+<ul>
+<li>这里要知道个概念, 绝对路径和相对路径;</li>
+<li>绝对路径是指从根目录开始拼接的目录串, 如/home/test</li>
+<li>相对路径是指以当前目录为基点, 比如现在已经在/home 目录下, /home 下的 test 对于我们来说就是相对路径;
+<ul>
+<li><code>.</code>代表当前目录, <code>..</code>代表上层目录;</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#跳转到根目录</span></span><br><span class="line"><span class="built_in">cd</span> /</span><br><span class="line"></span><br><span class="line"><span class="comment">#跳转到指定目录(如/home下的test目录)</span></span><br><span class="line"><span class="built_in">cd</span> /home/<span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跳转到当前目录下的test目录(比如现在已经执行过cd /home,而/home目录下有test目录, 就无需cd到绝对路径)</span></span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#跳转到上级目录(比如现在/home/test目录下, 想回到/home目录)</span></span><br><span class="line"><span class="built_in">cd</span> ..</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在当前目录下创建目录, 即相对路径, 比如创建一个叫test的目录</span></span><br><span class="line">mkdir <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#在指定目录下创建目录, 即绝对路径, 比如现在根目录, 想要在/home目录下创建一个test目录</span></span><br><span class="line">mkdir /home/<span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建多层目录, 比如想创建一个目录a, 里面包含目录a1, a1目录里面又包含a2</span></span><br><span class="line">mkdir -p a/a1/a2</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这个命令只能删除一个空的目录</span></span><br><span class="line">rmdir</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>复制文件/目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#复制一个文件到另一个位置(同样支持绝对路径和相对路径), 如现在/home/test目录下有个文件1.txt, 要把它复制到/home下</span></span><br><span class="line">    <span class="comment">#方法1</span></span><br><span class="line">    cp 1.txt /home/1.txt</span><br><span class="line"></span><br><span class="line">    <span class="comment">#方法2(想一想这里的../代表什么)</span></span><br><span class="line">    cp 1.txt ../1.txt</span><br><span class="line"><span class="comment">#在/home下把test文件夹及里面的内容复制到/home/test2下</span></span><br><span class="line">    <span class="comment">#相对路径</span></span><br><span class="line">    cp -r <span class="built_in">test</span> test2</span><br><span class="line"></span><br><span class="line">    <span class="comment">#绝对路径</span></span><br><span class="line">    cp -r <span class="built_in">test</span> /home/test2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#常用参数</span></span><br><span class="line">    <span class="comment">#-i: 若目标档(destination)已经存在时, 在覆盖时会先询问动作的进行(常用)</span></span><br><span class="line">    <span class="comment">#-r: 递归持续复制, 用於目录的复制行为(常用)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除文件/目录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#删掉/home/test下的1.txt文件</span></span><br><span class="line">rm /home/<span class="built_in">test</span>/1.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#删掉/home/test2目录(注意这个目录不为空)</span></span><br><span class="line">rm -rf /home/test2</span><br><span class="line"></span><br><span class="line"><span class="comment">#参数说明</span></span><br><span class="line">    <span class="comment">#-f : 就是 force 的意思, 忽略不存在的文件, 不会出现警告信息；</span></span><br><span class="line">    <span class="comment">#-i : 互动模式, 在删除前会询问使用者是否动作</span></span><br><span class="line">    <span class="comment">#-r : 递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><span style="color:#fb7a08;font-weight:bold;">注意<code>rm -rf</code>是一个非常危险的操作, 慎用!!!</span></li>
+</ul>
+</li>
+<li>
+<p>移动/重新命名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#具体用法跟cp差不多, 不是特别常用</span></span><br><span class="line">mv</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="磁盘命令">磁盘命令</h3>
+<ul>
+<li>
+<p>查看磁盘信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df</span><br><span class="line"><span class="comment">#常用 df -h查看磁盘空间</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看磁盘用量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">du</span><br><span class="line"><span class="comment">#常用 du -sh [目录名]查看某一目录占用磁盘空间</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>磁盘分区</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkfs <span class="comment">#磁盘格式化</span></span><br><span class="line">fdisk <span class="comment">#磁盘分区</span></span><br><span class="line">fsck <span class="comment">#磁盘检测</span></span><br><span class="line"><span class="comment">#这几个也不算常用, 一般在服务器初始化的时候需要;</span></span><br><span class="line"><span class="comment"># 或者阿里云服务器新增磁盘之类的操作, 需要的时候去查一下怎么用;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>挂载</p>
+<ul>
+<li>
+<p>挂载常用的就是在内网服务器插个<code>U盘</code>, 要读取里面的内容;<br>
+这样去理解, <code>windows</code>电脑插个<code>U盘</code>, 系统帮你自动识别了<code>U盘</code>的内容并显示出来, 而<code>Linux</code>不会, 你需要手动指定把这个<code>U盘</code>里的内容映射到某一文件夹;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#linux下挂载U盘步骤:</span></span><br><span class="line">    <span class="comment">#先查看现有磁盘, 这个命令会列出所有的磁盘</span></span><br><span class="line">    fdisk -l</span><br><span class="line"></span><br><span class="line">    <span class="comment">#插上U盘, 再执行上面的命令, 你会发现比之前多了一个磁盘, 比如多出来的磁盘叫/de/sdc2, 把这个磁盘挂载到/home/Upan(挂载点可以自己选择, 这里是举个例子)文件夹:</span></span><br><span class="line">    mount /dev/sdc2 /home/Upan</span><br><span class="line"></span><br><span class="line">    <span class="comment">#跳转到/home/Upan目录, 就可以查看里面的内容了</span></span><br><span class="line">    <span class="built_in">cd</span> /home/Upan</span><br><span class="line"></span><br><span class="line">    <span class="comment">#用完之后卸载U盘</span></span><br><span class="line">    umount /home/Upan</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>注意/home/Upan 只是一个挂载点, 并不是实际<code>U盘</code>位置, 当你执行了卸载命令之后, 再去查看/home/Upan 会发现这个目录是空的</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="vi-vim">vi/vim</h3>
+<ul>
+<li>
+<p><code>vi/vim</code>是世界上最好的<code>编辑器</code>, 懂得都懂[dog];</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#用vi编辑器编辑/home/test下的1.txt文件(绝对路径相对路径都可以)</span></span><br><span class="line">vi /home/<span class="built_in">test</span>/1.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#进去之后会看到里面的内容, 操作系统不同,</span></span><br><span class="line"><span class="comment">#一般按下i进行输入编辑, 键盘的上下左右来控制光标;</span></span><br><span class="line"><span class="comment">#完成编辑之后按esc键, 进入底线命令模式</span></span><br><span class="line"><span class="comment">#再按:(冒号键)后输入:</span></span><br><span class="line">    <span class="comment">#q 退出程序</span></span><br><span class="line">    <span class="comment">#w 保存文件</span></span><br><span class="line"><span class="comment">#一般都是:wq回车保存并退出</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="远程拷贝">远程拷贝</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#把本地桌面上的1.txt文件拷贝到服务器(比如ip是192.168.1.111)的/home/test文件夹下:</span></span><br><span class="line">scp /Users/name/Desktop/1.txt name@192.168.1.111:/home/<span class="built_in">test</span></span><br><span class="line"><span class="comment">#会让你输入服务器对应name这个用户的密码</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#远程拷贝的同时重命名(本地1.txt拷贝到服务器变成2.txt):</span></span><br><span class="line">scp /Users/name/Desktop/1.txt name@192.168.1.111:/home/<span class="built_in">test</span>/2.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#复制目录[连同目录下文件](执行完服务器/home/test目录下回出现一个名为mulu的目录)</span></span><br><span class="line">scp -r /Users/name/Desktop/mulu/ name@192.168.1.111:/home/<span class="built_in">test</span>/</span><br><span class="line"></span><br><span class="line"><span class="comment">#反过来从服务器复制文件/目录到本地(就是把上面的服务器地址和本地地址对调):</span></span><br><span class="line">scp name@192.168.1.111:/home/<span class="built_in">test</span>/2.txt /Users/name/Desktop/1.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#免密(证书)scp</span></span><br><span class="line">scp -i privatekey.file file user@machine:/path</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果远程服务器防火墙有为scp命令设置了指定的端口, 我们需要使用-P参数来设置命令的端口号</span></span><br><span class="line">scp -P [port] ...</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>总结一下:<code>scp [起始位置] [目标位置]</code></strong></li>
+</ul>
+<h3 id="查看进程">查看进程</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看进程</span></span><br><span class="line">ps</span><br><span class="line"></span><br><span class="line"><span class="comment">#最常用的就是查看某一服务是否启动, 比如查看apache服务是否启动:</span></span><br><span class="line">ps -aux | grep apache</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看进程详情</span></span><br><span class="line">ps [pid]</span><br><span class="line"></span><br><span class="line"><span class="comment">#杀掉进程</span></span><br><span class="line"><span class="built_in">kill</span> -9 [pid]</span><br></pre></td></tr></table></figure>
+<h3 id="查看端口">查看端口</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列出所有端口(可用管道筛选)</span></span><br><span class="line">netstat -ntlp</span><br><span class="line"></span><br><span class="line"><span class="comment">#列出所有正在使用的端口及关联的进程/应用(可用管道筛选)</span></span><br><span class="line">netstat -nap</span><br><span class="line"></span><br><span class="line"><span class="comment">#检查端口被哪个进程占用</span></span><br><span class="line">netstat -lnp | grep [port]</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看当前所有已经使用的端口情况</span></span><br><span class="line">netstat   -nultp</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>(all)显示所有选项，默认不显示 LISTEN 相关</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>(tcp)仅显示 tcp 相关选项</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>(udp)仅显示 udp 相关选项</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>拒绝显示别名，能显示数字的全部转化成数字。</td>
+</tr>
+<tr>
+<td>-l</td>
+<td>仅列出有在 Listen (监听) 的服務状态</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>显示建立相关链接的程序名</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>显示路由信息，路由表</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>显示扩展信息，例如 uid 等</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>按各个协议进行统计</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>每隔一个固定时间，执行该 netstat 命令。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列出所有正在使用某一端口的进程/应用</span></span><br><span class="line">lsof -i :[port]</span><br></pre></td></tr></table></figure>
+<h3 id="进程守护">进程守护</h3>
+<blockquote>
+<p>更详细的说明参见<a target="_blank" rel="noopener" href="https://www.cnblogs.com/guge-94/p/11131947.html">《Linux 守护进程之 systemd》</a></p>
+</blockquote>
+<ul>
+<li>
+<p>以前用<code>init.d</code>, <code>CentOS7</code>开始用<code>systemd</code>作为系统的守护进程;</p>
+</li>
+<li>
+<p>我们自己创建的<code>.service</code>一般放在<code>/usr/lib/systemd/system/</code>;</p>
+</li>
+<li>
+<p><code>.service</code>文件内容(看一个例子):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=Redis persistent key-value database</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/bin/redis-server /etc/redis.conf --supervised systemd</span><br><span class="line">ExecStop=/usr/libexec/redis-shutdown</span><br><span class="line">Type=notify</span><br><span class="line">User=redis</span><br><span class="line">Group=redis</span><br><span class="line">RuntimeDirectory=redis</span><br><span class="line">RuntimeDirectoryMode=0755</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><code>Unit</code>主要字段</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Description</td>
+<td>简短描述</td>
+</tr>
+<tr>
+<td>Documentation</td>
+<td>文档地址</td>
+</tr>
+<tr>
+<td>Requires</td>
+<td>明确的定义此 unit 需要在哪个 daemon 启动后才能够启动！就是设置相依服务啦！如果在此项设置的前导服务没有启动，那么此 unit 就不会被启动！</td>
+</tr>
+<tr>
+<td>Wants</td>
+<td>与 Requires 刚好相反，规范的是这个 unit 之后最好还要启动什么服务比较好的意思！不过，并没有明确的规范就是了！主要的目的是希望创建让使用者比较好操作的环境。 因此，这个 Wants 后面接的服务如果没有启动，其实不会影响到这个 unit 本身！</td>
+</tr>
+<tr>
+<td>BindsTo</td>
+<td>与 Requires 类似，它指定的 Unit 如果退出，会导致当前 Unit 停止运行</td>
+</tr>
+<tr>
+<td>Before</td>
+<td>如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之前启动</td>
+</tr>
+<tr>
+<td>After</td>
+<td>如果该字段指定的 Unit 也要启动，那么必须在当前 Unit 之后启动</td>
+</tr>
+<tr>
+<td>Conflicts</td>
+<td>代表冲突的服务！亦即这个项目后面接的服务如果有启动，那么我们这个 unit 本身就不能启动！我们 unit 有启动，则此项目后的服务就不能启动！ 反正就是冲突性的检查啦！</td>
+</tr>
+<tr>
+<td>ConditionPathExists</td>
+<td>检测当前文件是否存在</td>
+</tr>
+<tr>
+<td>Assert…</td>
+<td>当前 Unit 运行必须满足的条件，否则会报启动失败</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code>Service</code>主要字段</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>定义启动时的进程行为。它有以下几种值。</td>
+</tr>
+<tr>
+<td>Type=simple</td>
+<td>默认值，执行 ExecStart 指定的命令，启动主进程</td>
+</tr>
+<tr>
+<td>Type=forking</td>
+<td>以 fork 方式从父进程创建子进程，创建后父进程会立即退出</td>
+</tr>
+<tr>
+<td>Type=oneshot</td>
+<td>一次性进程，Systemd 会等当前服务退出，再继续往下执行</td>
+</tr>
+<tr>
+<td>Type=dbus</td>
+<td>当前服务通过 D-Bus 启动</td>
+</tr>
+<tr>
+<td>Type=notify</td>
+<td>当前服务启动完毕，会通知 Systemd，再继续往下执行</td>
+</tr>
+<tr>
+<td>Type=idle</td>
+<td>若有其他任务执行完毕，当前服务才会运行 User</td>
+</tr>
+<tr>
+<td>ExecStart</td>
+<td>启动当前服务的命令</td>
+</tr>
+<tr>
+<td>ExecStartPre</td>
+<td>启动当前服务之前执行的命令</td>
+</tr>
+<tr>
+<td>ExecStartPost</td>
+<td>启动当前服务之后执行的命令</td>
+</tr>
+<tr>
+<td>ExecReload</td>
+<td>重启当前服务时执行的命令</td>
+</tr>
+<tr>
+<td>ExecStop</td>
+<td>停止当前服务时执行的命令</td>
+</tr>
+<tr>
+<td>ExecStopPost</td>
+<td>停止当其服务之后执行的命令</td>
+</tr>
+<tr>
+<td>RestartSec</td>
+<td>自动重启当前服务间隔的秒数</td>
+</tr>
+<tr>
+<td>Restart</td>
+<td>定义何种情况 Systemd 会自动重启当前服务，可能的值包括 always（总是重启）、on-success、on-failure、on-abnormal、on-abort、on-watchdog</td>
+</tr>
+<tr>
+<td>TimeoutSec</td>
+<td>定义 Systemd 停止当前服务之前等待的秒数</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>指定环境变量</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code>Install</code>主要字段</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WantedBy</td>
+<td>它的值是一个或多个 Target，当前 Unit 激活时（enable）符号链接会放入/etc/systemd/system 目录下面以 Target 名 + .wants 后缀构成的子目录中</td>
+</tr>
+<tr>
+<td>RequiredBy</td>
+<td>它的值是一个或多个 Target，当前 Unit 激活时，符号链接会放入/etc/systemd/system 目录下面以 Target 名 + .required 后缀构成的子目录中</td>
+</tr>
+<tr>
+<td>Alias</td>
+<td>当前 Unit 可用于启动的别名</td>
+</tr>
+<tr>
+<td>Also</td>
+<td>当前 Unit 激活（enable）时，会被同时激活的其他 Unit</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p>常用命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查看已启动的服务</span></span><br><span class="line">systemctl list-units --<span class="built_in">type</span>=service</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看是否设置开机启动</span></span><br><span class="line">systemctl list-unit-files | grep <span class="built_in">enable</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#重新加载一个服务的配置文件</span></span><br><span class="line">systemctl reload apache.service</span><br><span class="line"></span><br><span class="line"><span class="comment">#重载所有修改过的配置文件</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置开机启动</span></span><br><span class="line">systemctl <span class="built_in">enable</span> docker.service</span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭开机启动</span></span><br><span class="line">systemctl <span class="built_in">disable</span> docker.service</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="定时任务">定时任务</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/crontab</span><br><span class="line"><span class="comment"># 输出</span></span><br><span class="line">SHELL=/bin/bash</span><br><span class="line">PATH=/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line">MAILTO=root</span><br><span class="line"></span><br><span class="line"><span class="comment"># For details see man 4 crontabs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Example of job definition:</span></span><br><span class="line"><span class="comment"># .---------------- minute (0 - 59)</span></span><br><span class="line"><span class="comment"># |  .------------- hour (0 - 23)</span></span><br><span class="line"><span class="comment"># |  |  .---------- day of month (1 - 31)</span></span><br><span class="line"><span class="comment"># |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...</span></span><br><span class="line"><span class="comment"># |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat</span></span><br><span class="line"><span class="comment"># |  |  |  |  |</span></span><br><span class="line"><span class="comment"># *  *  *  *  * user-name  command to be executed</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>注释写的很清楚</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;分钟&gt; &lt;小时&gt; &lt;日&gt; &lt;月&gt; &lt;星期几&gt; &lt;用户&gt; &lt;命令&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>举例说明</p>
+<ul>
+<li>
+<p>假设我们要每天凌晨<code>3:00</code>执行<code>/test/test.sh</code>, 脚本就是:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 3 * * * root /<span class="built_in">test</span>/test.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>假设我们要每周<code>5</code>凌晨<code>4:00</code>执行<code>/test/test.sh</code>, 脚本就是:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 4 * * fri root /<span class="built_in">test</span>/test.sh</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>保存生效</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab /etc/crontab</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看任务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">crontab -l</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="资源占用">资源占用</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top</span><br></pre></td></tr></table></figure>
+<h3 id="管道-筛选">管道(筛选)</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#这里解释上面的 | grep 是什么意思</span></span><br><span class="line"><span class="comment">#比如直接 ps -A会列出很多很多的服务, 翻起来很费劲, | grep xxx就相当于在结果中筛选包含xxx的内容</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#再试一个</span></span><br><span class="line"><span class="comment">#跳转到根目录</span></span><br><span class="line"><span class="built_in">cd</span> /</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看所有包含b这个字母的目录</span></span><br><span class="line">ls | grep b</span><br></pre></td></tr></table></figure>
+<h3 id="压缩解压">压缩解压</h3>
+<ul>
+<li>
+<p>压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#压缩test目录为test.tar.gz</span></span><br><span class="line"><span class="comment">#常见情况一些复杂的目录如果通过scp -r传输可能会比较慢,</span></span><br><span class="line"><span class="comment">#可以压缩一下再传输压缩后的文件</span></span><br><span class="line">tar -czvf test.tar.gz <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#比较常用的如从外界下载一个三方库的安装包,</span></span><br><span class="line"><span class="comment">#需要解压之后安装, 一般linux下的压缩包都是.tar.gz格式,</span></span><br><span class="line"><span class="comment">#比如我们解压一个React的安装包react.tar.gz到当前目录;</span></span><br><span class="line">tar -xzvf react.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="查找">查找</h3>
+<ul>
+<li>查找软件安装位置<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#以ffmpeg为例</span></span><br><span class="line">whereis ffmpeg</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#ffmpeg: /usr/bin/ffmpeg /usr/share/ffmpeg /usr/share/man/man1/ffmpeg.1.gz</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>查找运行文件位置<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#以ffmpeg为例</span></span><br><span class="line"><span class="built_in">which</span> ffmpeg</span><br><span class="line"><span class="comment">#输出</span></span><br><span class="line"><span class="comment">#/usr/bin/ffmpeg</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="其他常用">其他常用</h3>
+<h4 id="Find-的妙用">Find 的妙用</h4>
+<ul>
+<li>
+<p>代码行数(会把空行也算进去, 不是很精确)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#统计当前目录下所有.js文件和.css文件的行数:</span></span><br><span class="line">find . <span class="string">&quot;(&quot;</span> -name <span class="string">&quot;*.js&quot;</span> -or -name <span class="string">&quot;*.css&quot;</span> <span class="string">&quot;)&quot;</span> -<span class="built_in">print</span> | xargs wc -l</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="软连接">软连接</h4>
+<ul>
+<li>
+<p>创建软连接</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ln -s [<span class="built_in">source</span>] [target]</span><br><span class="line"><span class="comment">#如在/xxx下创建一个ffmpeg的软连接(快捷方式)</span></span><br><span class="line">ln -s /usr/bin/ffmpeg /xxx/ffmpeg</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Ubuntu-默认-root-账户不能-SSH-登录问题">Ubuntu 默认 root 账户不能 SSH 登录问题</h4>
+<ul>
+<li>编辑<code>sshd_config</code>:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#此时默认需要sudo提权</span></span><br><span class="line">sudo vi /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+</li>
+<li>找到<code>#PermitRootLogin prohibit-password</code>, 在其下面加上一行:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="查看软硬件信息">查看软硬件信息</h4>
+<ul>
+<li>
+<p>查看系统信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lsb_release -a</span><br><span class="line"><span class="comment">#若不识别需先安装redhat-lsb-core</span></span><br><span class="line"><span class="comment">#yum install redhat-lsb-core</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看<code>CPU</code>信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看内存(槽位、信息)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmidecode | grep -A16 <span class="string">&quot;Memory Device$&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="让-CPU-负载-100">让 CPU 负载 100%</h4>
+<ul>
+<li>
+<p>命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `seq 1 $(cat /proc/cpuinfo |grep <span class="string">&quot;physical id&quot;</span> |wc -l)`; <span class="keyword">do</span> dd <span class="keyword">if</span>=/dev/zero of=/dev/null &amp; <span class="keyword">done</span></span><br><span class="line"><span class="comment"># 结束</span></span><br><span class="line"><span class="comment"># fg 后按 ctrl + C (因为该命令是放在后台执行)</span></span><br><span class="line"><span class="comment"># pkill -9 dd</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>说明:</p>
+<ul>
+<li>
+<p><code>cat /proc/cpuinfo |grep &quot;physical id&quot; | wc -l</code>可以获得 CPU 的个数,　我们将其表示为<code>N</code>;</p>
+</li>
+<li>
+<p><code>seq 1 N</code> 用来生成<code>１</code>到<code>N</code>之间的数字;</p>
+</li>
+<li>
+<p><code>for i in 'seq 1 N'</code>; 就是循环执行命令, 从<code>１</code>到<code>N</code>;</p>
+</li>
+<li>
+<p><code>dd if=/dev/zero of=/dev/null</code> 执行 <code>dd</code> 命令,　输出到<code>/dev/null</code>, 实际上只占用<code>CPU</code>,　没有<code>IO</code>操作;</p>
+</li>
+<li>
+<p>由于连续执行<code>N</code>个(<code>N</code>是<code>CPU</code>个数)的<code>dd</code>命令, 且使用率为<code>100%</code>,　这时调度器会调度每个<code>dd</code>命令在不同的<code>CPU</code>上处理.</p>
+</li>
+<li>
+<p>最终就实现所有<code>CPU</code>占用率<code>100%</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="系统目录结构">系统目录结构</h3>
+<blockquote>
+<p>这部分内容摘自<a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-system-contents.html">《菜鸟教程》</a></p>
+</blockquote>
+<ul>
+<li>
+<p><code>linux</code>根目录为&quot;/&quot;, 可以理解为树结构, 所有的<code>/xx/xx...</code>都是这棵树的分支;</p>
+<ul>
+<li>
+<p><code>/bin</code>是<code>Binaries</code>(二进制文件) 的缩写, 这个目录存放着最经常使用的命令;</p>
+</li>
+<li>
+<p><code>/boot</code>这里存放的是启动<code>Linux</code>时使用的一些核心文件, 包括一些连接文件以及镜像文件;</p>
+</li>
+<li>
+<p><code>/dev</code>是<code>Device</code>(设备) 的缩写, 该目录下存放的是<code>Linux</code>的外部设备, 在<code>Linux</code>中访问设备的方式和访问文件的方式是相同的;</p>
+</li>
+<li>
+<p><code>/etc</code>是<code>Etcetera</code>(等等) 的缩写,这个目录用来存放所有的系统管理所需要的配置文件和子目录;</p>
+</li>
+<li>
+<p><code>/home</code>用户的主目录, 在<code>Linux</code>中, 每个用户都有一个自己的目录, 一般该目录名是以用户的账号命名的;</p>
+</li>
+<li>
+<p><code>/lib</code>是<code>Library</code>(库)的缩写这个目录里存放着系统最基本的动态连接共享库, 其作用类似于<code>Windows</code>里的<code>DLL</code>文件; 几乎所有的应用程序都需要用到这些共享库;</p>
+</li>
+<li>
+<p><code>/lost+found</code>这个目录一般情况下是空的, 当系统非法关机后, 这里就存放了一些文件;</p>
+</li>
+<li>
+<p><code>/media</code> <code>linux</code>系统会自动识别一些设备, 例如<code>U盘</code>, 光驱等等, 当识别后, <code>Linux</code>会把识别的设备挂载到这个目录下;</p>
+</li>
+<li>
+<p><code>/mnt</code>系统提供该目录是为了让用户临时挂载别的文件系统的, 我们可以将光驱挂载在<code>/mnt/</code>上, 然后进入该目录就可以查看光驱里的内容了;</p>
+</li>
+<li>
+<p><code>/opt</code>是<code>optional</code>(可选) 的缩写, 这是给主机额外安装软件所摆放的目录; 比如你安装一个<code>ORACLE</code>数据库则就可以放到这个目录下; 默认是空的;</p>
+</li>
+<li>
+<p><code>/proc</code>是<code>Processes</code>(进程) 的缩写, <code>/proc</code>是一种伪文件系统(也即虚拟文件系统), 存储的是当前内核运行状态的一系列特殊文件, 这个目录是一个虚拟的目录, 它是系统内存的映射, 我们可以通过直接访问这个目录来获取系统信息;</p>
+<ul>
+<li>这个目录的内容不在硬盘上而是在内存里, 我们也可以直接修改里面的某些文件, 比如可以通过下面的命令来屏蔽主机的<code>ping</code>命令, 使别人无法<code>ping</code>你的机器:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/icmp_echo_ignore_all</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><code>/root</code>该目录为系统管理员, 也称作超级权限者的用户主目录;</p>
+</li>
+<li>
+<p><code>/sbin</code>是<code>Superuser Binaries</code>(超级用户的二进制文件) 的缩写, 这里存放的是系统管理员使用的系统管理程序;</p>
+</li>
+<li>
+<p><code>/selinux</code>这个目录是<code>Redhat/CentOS</code>所特有的目录, <code>Selinux</code>是一个安全机制, 类似于<code>windows</code>的防火墙, 但是这套机制比较复杂, 这个目录就是存放<code>selinux</code>相关的文件的;</p>
+</li>
+<li>
+<p><code>/srv</code>该目录存放一些服务启动之后需要提取的数据;</p>
+</li>
+<li>
+<p><code>/sys</code>这是<code>Linux2.6</code>内核的一个很大的变化; 该目录下安装了<code>2.6</code>内核中新出现的一个文件系统<code>sysfs</code>;<code>sysfs</code>文件系统集成了下面 3 种文件系统的信息: 针对进程信息的<code>proc</code>文件系统, 针对设备的<code>devfs</code>文件系统以及针对伪终端的<code>devpts</code>文件系统; 该文件系统是内核设备树的一个直观反映; 当一个内核对象被创建的时候, 对应的文件和目录也在内核对象子系统中被创建;</p>
+</li>
+<li>
+<p><code>/tmp</code>是<code>temporary</code>(临时) 的缩写这个目录是用来存放一些临时文件的;</p>
+</li>
+<li>
+<p><code>/usr</code>是<code>unix shared resources</code>(共享资源) 的缩写, 这是一个非常重要的目录, 用户的很多应用程序和文件都放在这个目录下, 类似于<code>windows</code>下的<code>program files</code>目录;</p>
+</li>
+<li>
+<p><code>/usr/bin</code>系统用户使用的应用程序;</p>
+</li>
+<li>
+<p><code>/usr/sbin</code>超级用户使用的比较高级的管理程序和系统守护程序;</p>
+</li>
+<li>
+<p><code>/usr/src</code>内核源代码默认的放置目录;</p>
+</li>
+<li>
+<p><code>/var</code>是<code>variable</code>(变量) 的缩写, 这个目录中存放着在不断扩充着的东西, 我们习惯将那些经常被修改的目录放在这个目录下; 包括各种日志文件;</p>
+</li>
+<li>
+<p><code>/run</code>是一个临时文件系统, 存储系统启动以来的信息; 当系统重启时, 这个目录下的文件应该被删掉或清除; 如果你的系统上有<code>/var/run</code>目录, 应该让它指向<code>run</code>;</p>
+</li>
+</ul>
+</li>
+<li>
+<p>在<code>Linux</code>系统中, 有几个目录是比较重要的, 平时需要注意不要误删除或者随意更改内部文件;</p>
+<ul>
+<li>
+<p><code>/etc</code>上边也提到了, 这个是系统中的配置文件, 如果你更改了该目录下的某个文件可能会导致系统不能启动;</p>
+</li>
+<li>
+<p><code>/bin</code>, <code>/sbin</code>, <code>/usr/bin</code>, <code>/usr/sbin</code>: 这是系统预设的执行文件的放置目录, 比如<code>ls</code>就是在<code>/bin/ls</code>目录下的; 值得提出的是, <code>/bin</code>, <code>/usr/bin</code>是给系统用户使用的指令(除<code>root</code>外的通用户), 而<code>/sbin</code>, <code>/usr/sbin</code>则是给<code>root</code>使用的指令;</p>
+</li>
+<li>
+<p><code>/var</code>这是一个非常重要的目录, 系统上跑了很多程序, 那么每个程序都会有相应的日志产生, 而这些日志就被记录到这个目录下, 具体在<code>/var/log</code>目录下, 另外<code>mail</code>的预设放置也是在这里;</p>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E7%99%BB%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">远程登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%85%B3%E6%9C%BA%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">开关机命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8F%8A%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">文件及目录操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">磁盘命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#vi-vim"><span class="toc-number">5.</span> <span class="toc-text">vi&#x2F;vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%8B%B7%E8%B4%9D"><span class="toc-number">6.</span> <span class="toc-text">远程拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3"><span class="toc-number">8.</span> <span class="toc-text">查看端口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B%E5%AE%88%E6%8A%A4"><span class="toc-number">9.</span> <span class="toc-text">进程守护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1"><span class="toc-number">10.</span> <span class="toc-text">定时任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E5%8D%A0%E7%94%A8"><span class="toc-number">11.</span> <span class="toc-text">资源占用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E9%81%93-%E7%AD%9B%E9%80%89"><span class="toc-number">12.</span> <span class="toc-text">管道(筛选)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B"><span class="toc-number">13.</span> <span class="toc-text">压缩解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE"><span class="toc-number">14.</span> <span class="toc-text">查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8"><span class="toc-number">15.</span> <span class="toc-text">其他常用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Find-%E7%9A%84%E5%A6%99%E7%94%A8"><span class="toc-number">15.1.</span> <span class="toc-text">Find 的妙用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-number">15.2.</span> <span class="toc-text">软连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ubuntu-%E9%BB%98%E8%AE%A4-root-%E8%B4%A6%E6%88%B7%E4%B8%8D%E8%83%BD-SSH-%E7%99%BB%E5%BD%95%E9%97%AE%E9%A2%98"><span class="toc-number">15.3.</span> <span class="toc-text">Ubuntu 默认 root 账户不能 SSH 登录问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%BD%AF%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF"><span class="toc-number">15.4.</span> <span class="toc-text">查看软硬件信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A9-CPU-%E8%B4%9F%E8%BD%BD-100"><span class="toc-number">15.5.</span> <span class="toc-text">让 CPU 负载 100%</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">16.</span> <span class="toc-text">系统目录结构</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&text=Linux常用命令"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&is_video=false&description=Linux常用命令"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Linux常用命令&body=Check out this article: https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&title=Linux常用命令"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&name=Linux常用命令&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/&t=Linux常用命令"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

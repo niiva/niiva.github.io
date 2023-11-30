@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="搭建 使用 让hexo支持流程图(flowchart) 让hexo支持时序图(sequence)  补充(sequence时序图在一些主题里无法正常渲染的问题)   设置hexo主题(cactus) 变更渲染器 解决cactus对table渲染不友好的问题  由此引发的问题: 补充说明:     搭建   安装: 1234567# 前提是要安装gitnpm install hexo-cli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo搭建及使用">
+<meta property="og:url" content="https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="搭建 使用 让hexo支持流程图(flowchart) 让hexo支持时序图(sequence)  补充(sequence时序图在一些主题里无法正常渲染的问题)   设置hexo主题(cactus) 变更渲染器 解决cactus对table渲染不友好的问题  由此引发的问题: 补充说明:     搭建   安装: 1234567# 前提是要安装gitnpm install hexo-cli">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A81.jpeg">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A82.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A83.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A84.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A85.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A86.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A87.png">
+<meta property="og:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A88.png">
+<meta property="article:published_time" content="2021-02-09T04:03:05.000Z">
+<meta property="article:modified_time" content="2021-04-08T14:46:27.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A81.jpeg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Hexo搭建及使用</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/02/10/MPE%E8%AF%AD%E6%B3%95%E6%B5%8B%E8%AF%95/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/02/06/Charles%E6%8A%93%E5%8C%85iPhone(https)/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&text=Hexo搭建及使用"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&is_video=false&description=Hexo搭建及使用"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hexo搭建及使用&body=Check out this article: https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&name=Hexo搭建及使用&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&t=Hexo搭建及使用"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%B5%81%E7%A8%8B%E5%9B%BE-flowchart"><span class="toc-number">3.</span> <span class="toc-text">让hexo支持流程图(flowchart)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%97%B6%E5%BA%8F%E5%9B%BE-sequence"><span class="toc-number">4.</span> <span class="toc-text">让hexo支持时序图(sequence)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A5%E5%85%85-sequence%E6%97%B6%E5%BA%8F%E5%9B%BE%E5%9C%A8%E4%B8%80%E4%BA%9B%E4%B8%BB%E9%A2%98%E9%87%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E6%B8%B2%E6%9F%93%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">补充(sequence时序图在一些主题里无法正常渲染的问题)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEhexo%E4%B8%BB%E9%A2%98-cactus"><span class="toc-number">5.</span> <span class="toc-text">设置hexo主题(cactus)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E6%9B%B4%E6%B8%B2%E6%9F%93%E5%99%A8"><span class="toc-number">6.</span> <span class="toc-text">变更渲染器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3cactus%E5%AF%B9table%E6%B8%B2%E6%9F%93%E4%B8%8D%E5%8F%8B%E5%A5%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.</span> <span class="toc-text">解决cactus对table渲染不友好的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B1%E6%AD%A4%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.1.</span> <span class="toc-text">由此引发的问题:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-number">7.2.</span> <span class="toc-text">补充说明:</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Hexo搭建及使用
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-02-09T04:03:05.000Z" itemprop="datePublished">2021-02-09</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">博客搭建</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E6%90%AD%E5%BB%BA">搭建</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8">使用</a></li>
+<li><a href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%B5%81%E7%A8%8B%E5%9B%BEflowchart">让<code>hexo</code>支持流程图(<code>flowchart</code>)</a></li>
+<li><a href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%97%B6%E5%BA%8F%E5%9B%BEsequence">让<code>hexo</code>支持时序图(<code>sequence</code>)</a>
+<ul>
+<li><a href="#%E8%A1%A5%E5%85%85sequence%E6%97%B6%E5%BA%8F%E5%9B%BE%E5%9C%A8%E4%B8%80%E4%BA%9B%E4%B8%BB%E9%A2%98%E9%87%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E6%B8%B2%E6%9F%93%E7%9A%84%E9%97%AE%E9%A2%98">补充(<code>sequence</code>时序图在一些主题里无法正常渲染的问题)</a></li>
+</ul>
+</li>
+<li><a href="#%E8%AE%BE%E7%BD%AEhexo%E4%B8%BB%E9%A2%98cactus">设置<code>hexo</code>主题(<code>cactus</code>)</a></li>
+<li><a href="#%E5%8F%98%E6%9B%B4%E6%B8%B2%E6%9F%93%E5%99%A8">变更渲染器</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3cactus%E5%AF%B9table%E6%B8%B2%E6%9F%93%E4%B8%8D%E5%8F%8B%E5%A5%BD%E7%9A%84%E9%97%AE%E9%A2%98">解决<code>cactus</code>对<code>table</code>渲染不友好的问题</a>
+<ul>
+<li><a href="#%E7%94%B1%E6%AD%A4%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98">由此引发的问题:</a></li>
+<li><a href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E">补充说明:</a></li>
+</ul>
+</li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="搭建">搭建</h3>
+<ul>
+<li>
+<p>安装:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 前提是要安装git</span></span><br><span class="line">npm install hexo-cli -g</span><br><span class="line"></span><br><span class="line"><span class="comment"># 选一个目录执行</span></span><br><span class="line">hexo init HexoBlog</span><br><span class="line"><span class="built_in">cd</span> HexoBlog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="使用">使用</h3>
+<ul>
+<li>
+<p>常用命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打包静态页面</span></span><br><span class="line">hexo generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建文章</span></span><br><span class="line">hexo new post <span class="string">&quot;post name&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建&lt;关于&gt;页面</span></span><br><span class="line">hexo new page about</span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务运行</span></span><br><span class="line">hexo server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务运行(指定端口)</span></span><br><span class="line">hexo server -p &lt;port num&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务清理(有配置上的变动重新运行前清理一下比较稳妥)</span></span><br><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="让hexo支持流程图-flowchart">让<code>hexo</code>支持流程图(<code>flowchart</code>)</h3>
+<ul>
+<li>
+<p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-flowchart --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用(代码块后标记<code>flow</code>)<br>
+```flow<br>
+[流程图]<br>
+```</p>
+</li>
+<li>
+<p>语法结构如下: <code>X=&gt;Y: Z</code></p>
+<ul>
+<li><code>X</code>是变量名, <code>Y</code>是指操作模块名, 冒号后面的<code>Z</code>是具体显示的文字内容; 需要注意的是, <span style="color:#fb7a08;font-weight:bold;">冒号后要加空格才能识别;</span></li>
+<li>变量名<code>X</code>和文字内容<code>Z</code>可以比较随意设置, 但是<code>Y</code>是有固定的内容, 主要有以下几种:
+<table>
+<thead>
+<tr>
+<th>模块名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>start</td>
+<td>开始</td>
+</tr>
+<tr>
+<td>end</td>
+<td>结束</td>
+</tr>
+<tr>
+<td>operation</td>
+<td>普通操作块</td>
+</tr>
+<tr>
+<td>subroutine</td>
+<td>子任务块</td>
+</tr>
+<tr>
+<td>condition</td>
+<td>判断块</td>
+</tr>
+<tr>
+<td>inputoutput</td>
+<td>输入输出块</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+<li>
+<p>转向控制</p>
+<ul>
+<li>下面一段是流程图的转向控制, -&gt;是表示下一步要执行的操作; 如: <code>st-&gt;in-&gt;op-&gt;cond</code>, 表示的是先从<code>st</code>转到<code>in</code>, 然后再到<code>op</code>, 最后到<code>cond</code>;这里可以连续写, 也可以段开写, 如写成下面的也是完全 OK 的;<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">st-&gt;<span class="keyword">in</span></span><br><span class="line"><span class="keyword">in</span>-&gt;op</span><br><span class="line">op-&gt;cond</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>判断分支</p>
+<ul>
+<li>其中, <code>condition</code>是判断, 可以取<code>yes</code>和<code>no</code>两种结果, 对于不同结果可以有不同走向; 如:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cond(yes)-&gt;out <span class="comment"># 表示condition成立时转向out执行;</span></span><br><span class="line">cond(no)-&gt;op <span class="comment"># 表示condition不成立时转向op执行;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>例子:</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: 开始语句</span><br><span class="line"><span class="keyword">in</span>=&gt;inputoutput: 输入值</span><br><span class="line">e=&gt;end: 结束语句</span><br><span class="line">op=&gt;operation: 执行操作</span><br><span class="line">cond=&gt;condition: 是否成立？</span><br><span class="line">out=&gt;inputoutput: 输出值</span><br><span class="line"></span><br><span class="line">st-&gt;<span class="keyword">in</span>-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;out</span><br><span class="line">cond(no)-&gt;op</span><br><span class="line">out-&gt;e</span><br></pre></td></tr></table></figure>
+<div id="flowchart-0" class="flow-chart"></div>
+<p><span style="color:#fb7a08;font-weight:bold;">补充:当流程线与其他模块/线有交叉的时候, 可以加上<code>(left)</code>或<code>(right)</code>控制其走向;</span></p>
+<hr>
+<h3 id="让hexo支持时序图-sequence">让<code>hexo</code>支持时序图(<code>sequence</code>)</h3>
+<ul>
+<li>
+<p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-sequence --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>使用(代码块后标记<code>sequence</code>)<br>
+```sequence<br>
+[时序图]<br>
+```</p>
+</li>
+<li>
+<p>语法</p>
+<ul>
+<li>
+<p>基本元素</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>标题</td>
+</tr>
+<tr>
+<td>participant</td>
+<td>角色</td>
+</tr>
+<tr>
+<td>as</td>
+<td>角色别名</td>
+</tr>
+<tr>
+<td>note</td>
+<td>说明(可用<code>left/right of</code>、<code>over</code>来修饰, 再后面加<code>:</code>来补充<code>message</code>)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>符号指向</p>
+<table>
+<thead>
+<tr>
+<th>图形</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“-”</td>
+<td>代表实线 ， 主动发送消息，比如 request 请求</td>
+</tr>
+<tr>
+<td>“&gt;”</td>
+<td>代表实心箭头 ， 同步消息，比如 AJAX 的同步请求</td>
+</tr>
+<tr>
+<td>“–”</td>
+<td>代表虚线，表示返回消息，spring Controller return</td>
+</tr>
+<tr>
+<td>“&gt;&gt;”</td>
+<td>代表非实心箭头 ，异步消息，比如 AJAX 请求</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>图片说明<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A81.jpeg" alt="[语法图片]"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>例子</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">participant 客户端</span><br><span class="line">participant 服务器</span><br><span class="line">participant 通行证中心</span><br><span class="line"></span><br><span class="line">Note over 客户端: 用户输入通行证的账号、密码</span><br><span class="line">客户端-&gt;通行证中心: 发送账号、密码</span><br><span class="line">Note over 通行证中心: 验证账号、密码</span><br><span class="line">通行证中心--&gt;&gt;客户端: 返回token</span><br><span class="line">客户端-&gt;服务器: 发送token</span><br><span class="line">服务器-&gt;通行证中心: 验证token</span><br><span class="line">通行证中心--&gt;&gt;服务器: 验证成功</span><br><span class="line">服务器--&gt;&gt;客户端: 登陆成功</span><br></pre></td></tr></table></figure>
+<div id="sequence-0"></div>
+<h4 id="补充-sequence时序图在一些主题里无法正常渲染的问题">补充(<code>sequence</code>时序图在一些主题里无法正常渲染的问题)</h4>
+<ul>
+<li>
+<p>修改配置(<code>_config.yml</code>), 加入以下内容:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">sequence:</span></span><br><span class="line">  <span class="attr">raphael:</span> <span class="string">https://cdn.bootcss.com/raphael/2.2.8/raphael.min.js</span></span><br><span class="line">  <span class="attr">webfont:</span> <span class="string">https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js</span></span><br><span class="line">  <span class="attr">snap:</span> <span class="string">https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js</span></span><br><span class="line">  <span class="attr">underscore:</span> <span class="string">https://cdn.bootcss.com/underscore.js/1.9.1/underscore-min.js</span></span><br><span class="line">  <span class="attr">sequence:</span> <span class="string">https://cdn.bootcss.com/js-sequence-diagrams/1.0.6/sequence-diagram-min.js</span></span><br><span class="line">  <span class="comment"># css: # optional, the url for css, such as hand drawn theme</span></span><br><span class="line">  <span class="attr">options:</span></span><br><span class="line">    <span class="attr">theme:</span> <span class="string">simple</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改源码<code>HexoBlog/node_modules/hexo-filter-sequence/index.js</code>, 替换为以下内容:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> assign = <span class="built_in">require</span>(<span class="string">&quot;deep-assign&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> renderer = <span class="built_in">require</span>(<span class="string">&quot;./lib/renderer&quot;</span>);</span><br><span class="line"></span><br><span class="line">hexo.config.sequence = assign(</span><br><span class="line">  &#123;</span><br><span class="line">    webfont:</span><br><span class="line">      <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.27/webfontloader.js&quot;</span>,</span><br><span class="line">    <span class="comment">// sequence-diagram 1.x 版本依赖 raphael, 2.x版本依赖 snap</span></span><br><span class="line">    raphael:</span><br><span class="line">      <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js&quot;</span>,</span><br><span class="line">    snap:</span><br><span class="line">      <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js&quot;</span>,</span><br><span class="line">    underscore:</span><br><span class="line">      <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js&quot;</span>,</span><br><span class="line">    sequence:</span><br><span class="line">      <span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.6/sequence-diagram-min.js&quot;</span>,</span><br><span class="line">    css: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    options: &#123;</span><br><span class="line">      theme: <span class="string">&quot;simple&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  hexo.config.sequence</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">hexo.extend.filter.register(<span class="string">&quot;before_post_render&quot;</span>, renderer.render, <span class="number">9</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改源码<code>HexoBlog/node_modules/hexo-filter-sequence/lib/renderer.js</code>, 修改如下部分:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lib/renderer.js, 25 行</span></span><br><span class="line"><span class="keyword">if</span> (sequences.length) &#123;</span><br><span class="line">      <span class="keyword">var</span> config = <span class="built_in">this</span>.config.sequence;</span><br><span class="line">      <span class="comment">// resources</span></span><br><span class="line">      data.content += <span class="string">&#x27;&lt;script src=&quot;&#x27;</span> + config.webfont + <span class="string">&#x27;&quot;&gt;&lt;/script&gt;&#x27;</span>;</span><br><span class="line">      <span class="comment">// sequence-diagram 1.x 版本依赖 raphael, 2.x版本依赖 snap</span></span><br><span class="line">      data.content += <span class="string">&#x27;&lt;script src=&quot;&#x27;</span> + config.raphael + <span class="string">&#x27;&quot;&gt;&lt;/script&gt;&#x27;</span>;</span><br><span class="line">      data.content += <span class="string">&#x27;&lt;script src=&quot;&#x27;</span> + config.snap + <span class="string">&#x27;&quot;&gt;&lt;/script&gt;&#x27;</span>;</span><br><span class="line">      data.content += <span class="string">&#x27;&lt;script src=&quot;&#x27;</span> + config.underscore + <span class="string">&#x27;&quot;&gt;&lt;/script&gt;&#x27;</span>;</span><br><span class="line">      data.content += <span class="string">&#x27;&lt;script src=&quot;&#x27;</span> + config.sequence + <span class="string">&#x27;&quot;&gt;&lt;/script&gt;&#x27;</span>;</span><br><span class="line">      ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="设置hexo主题-cactus">设置<code>hexo</code>主题(<code>cactus</code>)</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/probberechts/hexo-theme-cactus">文档</a></p>
+<ul>
+<li>
+<p>安装:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入目录</span></span><br><span class="line"><span class="built_in">cd</span> HexoBlog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/probberechts/hexo-theme-cactus.git themes/cactus</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改配置(<code>_config.yml</code>)</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">theme:</span> <span class="string">cactus</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="变更渲染器">变更渲染器</h3>
+<ul>
+<li>
+<p>测试过程中发现一些格式没有正确解析,如脚注、上标、下标、mark、数学公式<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A82.png" alt="alt"></p>
+</li>
+<li>
+<p>卸载之前的渲染器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm un hexo-renderer-marked --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装新的渲染器</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-markdown-it --save</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改<code>_config.yml</code>文件, 增加以下内容:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Markdown Render</span></span><br><span class="line"><span class="attr">markdown:</span></span><br><span class="line">  <span class="attr">preset:</span> <span class="string">&quot;default&quot;</span></span><br><span class="line">  <span class="attr">render:</span></span><br><span class="line">    <span class="attr">html:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">xhtmlOut:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">langPrefix:</span> <span class="string">&quot;language-&quot;</span></span><br><span class="line">    <span class="attr">breaks:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">linkify:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">typographer:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">quotes:</span> <span class="string">&quot;“”‘’&quot;</span></span><br><span class="line">  <span class="attr">enable_rules:</span></span><br><span class="line">  <span class="attr">disable_rules:</span></span><br><span class="line">  <span class="attr">plugins:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-abbr</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-cjk-breaks</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-container</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-deflist</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-emoji</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-footnote</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-ins</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-mark</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-sub</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">markdown-it-sup</span></span><br><span class="line">  <span class="attr">anchors:</span></span><br><span class="line">    <span class="attr">level:</span> <span class="number">2</span></span><br><span class="line">    <span class="attr">collisionSuffix:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="attr">permalink:</span> <span class="literal">false</span></span><br><span class="line">    <span class="attr">permalinkClass:</span> <span class="string">&quot;header-anchor&quot;</span></span><br><span class="line">    <span class="attr">permalinkSide:</span> <span class="string">&quot;left&quot;</span></span><br><span class="line">    <span class="attr">permalinkSymbol:</span> <span class="string">&quot;¶&quot;</span></span><br><span class="line">    <span class="attr">case:</span> <span class="number">0</span></span><br><span class="line">    <span class="attr">separator:</span> <span class="string">&quot;-&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>至此, 脚注、上标、下标、mark 的问题都解决了, 数学公式的渲染还是有问题</p>
+</li>
+<li>
+<p>去翻了下插件<a target="_blank" rel="noopener" href="https://www.npmjs.com/search?q=keywords:markdown-it-plugin">markdown-it 插件</a>后, 目前为止发现最好用的数学公式解析是<code>@area403/markdown-it-mathjax</code></p>
+<ul>
+<li>安装</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @area403/markdown-it-mathjax --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>在<code>_config.yml</code>的<code>plugins</code>加入<code>- '@area403/markdown-it-mathjax'</code></p>
+<ul>
+<li>因为上一步<code>npm install</code>会多生成一层<code>@area403</code>目录,所以这里的<code>'@area403/markdown-it-mathjax'</code><span style="color:#fb7a08;font-weight:bold;">要用引号包裹</span>, 不然会报错说找不到这个模块;</li>
+</ul>
+</li>
+<li>
+<p>最终效果<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A83.png" alt="alt"></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="解决cactus对table渲染不友好的问题">解决<code>cactus</code>对<code>table</code>渲染不友好的问题</h3>
+<ul>
+<li>
+<p><code>table</code>默认的样子如下图, 看起来相当的不友好:<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A84.png" alt="alt"></p>
+</li>
+<li>
+<p>修改过程:</p>
+<ul>
+<li>
+<p>打开文件<code>themes-&gt;cactus-&gt;source-&gt;css-&gt;style.styl</code></p>
+</li>
+<li>
+<p>加入以下内容:</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">table</span></span><br><span class="line">  <span class="selector-tag">table</span>-layout: fixed</span><br><span class="line">  max-width: <span class="number">1000px</span> // 表格最大宽度 避免表格过宽</span><br><span class="line">  margin: <span class="number">15px</span> auto // 外边距</span><br><span class="line">  border-collapse: collapse // 使用单一线条的边框</span><br><span class="line">  word-break:break-all</span><br><span class="line">  word-wrap:break-word</span><br><span class="line">  empty-cells: show // 单元格无内容依旧绘制边框</span><br><span class="line"></span><br><span class="line">  th</span><br><span class="line">    height: <span class="number">35px</span> // 统一每一行的默认高度</span><br><span class="line">    border: <span class="number">1px</span> solid <span class="number">#dedede</span> // 内部边框样式</span><br><span class="line">    padding: <span class="number">0</span> <span class="number">10px</span> // 内边距</span><br><span class="line">    font-weight: bold // 加粗</span><br><span class="line">    text-align: center <span class="meta">!important</span> // 内容居中, 加上 <span class="meta">!important</span> 避免被 Markdown 样式覆盖</span><br><span class="line">    background: rgba(<span class="number">158</span>,<span class="number">188</span>,<span class="number">226</span>,<span class="number">0.2</span>) // 背景色</span><br><span class="line"></span><br><span class="line">  td</span><br><span class="line">    height: <span class="number">35px</span> // 统一每一行的默认高度</span><br><span class="line">    border: <span class="number">1px</span> solid <span class="number">#dedede</span> // 内部边框样式</span><br><span class="line">    padding: <span class="number">0</span> <span class="number">10px</span> // 内边距</span><br><span class="line"></span><br><span class="line">  tbody</span><br><span class="line">    tr:nth-child(<span class="number">2</span>n)</span><br><span class="line">      background: rgba(<span class="number">158</span>,<span class="number">188</span>,<span class="number">226</span>,<span class="number">0.12</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改完样子(这就是我想要的样子):<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A85.png" alt="alt"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="由此引发的问题">由此引发的问题:</h4>
+<ul>
+<li>
+<p>代码块被影响了<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A86.png" alt="alt"></p>
+</li>
+<li>
+<p>浏览器查看, 找到 style class, 发现这里<code>code block</code>最终被渲染成了 table, 这样我们上面修改的 table 样式就对其产生了影响:<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A87.png" alt="alt"></p>
+</li>
+<li>
+<p>解决办法:</p>
+<ul>
+<li>
+<p>打开文件<code>themes-&gt;cactus-&gt;source-&gt;css-&gt;style.styl</code></p>
+</li>
+<li>
+<p>修改以下部分:</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.highlight</span></span><br><span class="line">  <span class="selector-tag">table</span></span><br><span class="line">    <span class="attribute">width</span>: auto</span><br><span class="line">    border: none // code模块table无外框</span><br><span class="line"></span><br><span class="line">  td</span><br><span class="line">    border: none // code模块单元格无外框</span><br><span class="line"></span><br><span class="line">    &amp;.gutter</span><br><span class="line">      text-align: right</span><br><span class="line">      opacity: .<span class="number">2</span></span><br><span class="line">      border-right: <span class="number">1px</span> solid <span class="number">#dedede</span> // 行号右边加一条线(个人习惯, 我喜欢行号与代码之间有条竖线分隔)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>改完的样子<br>
+<img src="https://images.jindu.link/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A88.png" alt="alt"></p>
+</li>
+</ul>
+<h4 id="补充说明">补充说明:</h4>
+<ul>
+<li>
+<p><strong>上面是以<code>cactus</code>主题为例的, 在更换主题的过程中发现有些主题的<code>style</code>是用<code>css</code>格式定义的, 办法与上文类似, 只是<code>Stylus</code>代码需要转成<code>css</code>格式:</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">table</span> &#123;</span><br><span class="line">  <span class="attribute">table-layout</span>: fixed;</span><br><span class="line">  <span class="attribute">max-width</span>: <span class="number">1000px</span>; <span class="comment">/*表格最大宽度 避免表格过宽*/</span></span><br><span class="line">  <span class="comment">/* margin: 15px auto; 外边距 */</span></span><br><span class="line">  <span class="attribute">border-collapse</span>: collapse; <span class="comment">/*使用单一线条的边框*/</span></span><br><span class="line">  <span class="attribute">word-break</span>: break-all;</span><br><span class="line">  <span class="attribute">word-wrap</span>: break-word;</span><br><span class="line">  <span class="attribute">empty-cells</span>: show; <span class="comment">/*单元格无内容依旧绘制边框*/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">th</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">35px</span>; <span class="comment">/*统一每一行的默认高度*/</span></span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#dedede</span>; <span class="comment">/*内部边框样式*/</span></span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">10px</span>; <span class="comment">/*内边距*/</span></span><br><span class="line">  <span class="attribute">font-weight</span>: bold; <span class="comment">/*加粗*/</span></span><br><span class="line">  <span class="attribute">text-align</span>: center <span class="meta">!important</span>; <span class="comment">/*内容居中, 加上 !important 避免被 Markdown 样式覆盖*/</span></span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">158</span>, <span class="number">188</span>, <span class="number">226</span>, <span class="number">0.2</span>); <span class="comment">/*背景色*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">td</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">35px</span>; <span class="comment">/*统一每一行的默认高度*/</span></span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#dedede</span>; <span class="comment">/*内部边框样式*/</span></span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">10px</span>; <span class="comment">/*内边距*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">tbody</span> <span class="selector-tag">tr</span><span class="selector-pseudo">:nth-child</span>(<span class="number">2</span>n) &#123;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">rgba</span>(<span class="number">158</span>, <span class="number">188</span>, <span class="number">226</span>, <span class="number">0.12</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<script src="https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js"></script><script src="https://cdn.bootcss.com/raphael/2.2.8/raphael.min.js"></script><script src="https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js"></script><script src="https://cdn.bootcss.com/underscore.js/1.9.1/underscore-min.js"></script><script src="https://cdn.bootcss.com/js-sequence-diagrams/1.0.6/sequence-diagram-min.js"></script><textarea id="sequence-0-code" style="display: none">participant 客户端
+participant 服务器
+participant 通行证中心
+
+Note over 客户端: 用户输入通行证的账号、密码
+客户端->通行证中心: 发送账号、密码
+Note over 通行证中心: 验证账号、密码
+通行证中心-->>客户端: 返回token
+客户端->服务器: 发送token
+服务器->通行证中心: 验证token
+通行证中心-->>服务器: 验证成功
+服务器-->>客户端: 登陆成功</textarea><textarea id="sequence-0-options" style="display: none">{"theme":"simple"}</textarea><script>  var code = document.getElementById("sequence-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("sequence-0-options").value));  var diagram = Diagram.parse(code);  diagram.drawSVG("sequence-0", options);</script><script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始语句
+in=>inputoutput: 输入值
+e=>end: 结束语句
+op=>operation: 执行操作
+cond=>condition: 是否成立？
+out=>inputoutput: 输出值
+
+st->in->op->cond
+cond(yes)->out
+cond(no)->op
+out->e</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA"><span class="toc-number">1.</span> <span class="toc-text">搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%B5%81%E7%A8%8B%E5%9B%BE-flowchart"><span class="toc-number">3.</span> <span class="toc-text">让hexo支持流程图(flowchart)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A9hexo%E6%94%AF%E6%8C%81%E6%97%B6%E5%BA%8F%E5%9B%BE-sequence"><span class="toc-number">4.</span> <span class="toc-text">让hexo支持时序图(sequence)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A5%E5%85%85-sequence%E6%97%B6%E5%BA%8F%E5%9B%BE%E5%9C%A8%E4%B8%80%E4%BA%9B%E4%B8%BB%E9%A2%98%E9%87%8C%E6%97%A0%E6%B3%95%E6%AD%A3%E5%B8%B8%E6%B8%B2%E6%9F%93%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">补充(sequence时序图在一些主题里无法正常渲染的问题)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AEhexo%E4%B8%BB%E9%A2%98-cactus"><span class="toc-number">5.</span> <span class="toc-text">设置hexo主题(cactus)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E6%9B%B4%E6%B8%B2%E6%9F%93%E5%99%A8"><span class="toc-number">6.</span> <span class="toc-text">变更渲染器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3cactus%E5%AF%B9table%E6%B8%B2%E6%9F%93%E4%B8%8D%E5%8F%8B%E5%A5%BD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.</span> <span class="toc-text">解决cactus对table渲染不友好的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%B1%E6%AD%A4%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">7.1.</span> <span class="toc-text">由此引发的问题:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-number">7.2.</span> <span class="toc-text">补充说明:</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&text=Hexo搭建及使用"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&is_video=false&description=Hexo搭建及使用"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hexo搭建及使用&body=Check out this article: https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&title=Hexo搭建及使用"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&name=Hexo搭建及使用&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/02/09/Hexo%E6%90%AD%E5%BB%BA%E5%8F%8A%E4%BD%BF%E7%94%A8/&t=Hexo搭建及使用"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

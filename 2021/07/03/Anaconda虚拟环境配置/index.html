@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="安装 升级 虚拟环境配置(测试) 常用命令  环境管理 包管理   iTerm2的问题    Anaconda是一个用于科学计算的Python发行版, 支持 Linux, Mac, Windows系统, 提供了包管理与环境管理的功能, 可以很方便地解决多版本Python并存、切换以及各种第三方包安装问题; Anaconda利用工具&#x2F;命令conda来进行package和environment的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anaconda虚拟环境配置">
+<meta property="og:url" content="https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="安装 升级 虚拟环境配置(测试) 常用命令  环境管理 包管理   iTerm2的问题    Anaconda是一个用于科学计算的Python发行版, 支持 Linux, Mac, Windows系统, 提供了包管理与环境管理的功能, 可以很方便地解决多版本Python并存、切换以及各种第三方包安装问题; Anaconda利用工具&#x2F;命令conda来进行package和environment的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-07-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-24T04:05:24.343Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Anaconda虚拟环境配置</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/09/18/CentOS%E9%85%8D%E7%BD%AEclamav%E6%9D%80%E6%AF%92/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/06/23/CentOS8%E5%AE%89%E8%A3%85MySQL5.7/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&text=Anaconda虚拟环境配置"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&is_video=false&description=Anaconda虚拟环境配置"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Anaconda虚拟环境配置&body=Check out this article: https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&name=Anaconda虚拟环境配置&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&t=Anaconda虚拟环境配置"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7"><span class="toc-number">2.</span> <span class="toc-text">升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">虚拟环境配置(测试)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">环境管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">包管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">iTerm2的问题</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Anaconda虚拟环境配置
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-07-02T16:00:00.000Z" itemprop="datePublished">2021-07-03</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Python/">Python</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#%E5%8D%87%E7%BA%A7">升级</a></li>
+<li><a href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%B5%8B%E8%AF%95">虚拟环境配置(测试)</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a>
+<ul>
+<li><a href="#%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86">环境管理</a></li>
+<li><a href="#%E5%8C%85%E7%AE%A1%E7%90%86">包管理</a></li>
+</ul>
+</li>
+<li><a href="#iterm2%E7%9A%84%E9%97%AE%E9%A2%98">iTerm2的问题</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<blockquote>
+<p><code>Anaconda</code>是一个用于科学计算的<code>Python</code>发行版, 支持 <code>Linux</code>, <code>Mac</code>, <code>Windows</code>系统, 提供了包管理与环境管理的功能, 可以很方便地解决多版本<code>Python</code>并存、切换以及各种第三方包安装问题;<br>
+<code>Anaconda</code>利用工具/命令<code>conda</code>来进行<code>package</code>和<code>environment</code>的管理, 并且已经包含了<code>Python</code>和相关的配套工具;<br>
+<code>Anaconda</code>是一个打包的集合, 里面包含了几百个数据科学相关的开源包, 在数据可视化、机器学习、深度学习等多方面都有涉及; 不仅可以做数据分析, 还可以用在大数据和人工智能等领域; 安装它后就默认安装了<code>Python</code>、<code>IPython</code>、<code>Jupyter notebook</code>和集成开发环境<code>Spyder</code>等等;<br>
+各个虚拟环境之间保持独立, 互不影响, 实用性非常高;</p>
+</blockquote>
+<h3 id="安装">安装</h3>
+<ul>
+<li>
+<p>选择版本</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://repo.anaconda.com/archive/">点击这里</a>可以查看各平台各版本, 根据自己的需要选择对应版本;</li>
+<li><span style="color:#fb7a08;font-weight:bold;">本文以当前最新版本<code>2021-05-13版本</code>为例;</span></li>
+</ul>
+</li>
+<li>
+<p>下载安装脚本(也可以通过浏览器下载)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/archive/Anaconda3-2021.05-MacOSX-x86_64.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>修改脚本权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod +x Anaconda3-2021.05-MacOSX-x86_64.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>执行脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">./Anaconda3-2021.05-MacOSX-x86_64.sh</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#一直按回车往下看, 后面会有提示:</span></span><br><span class="line"><span class="comment">#Do you accept the license terms? [yes|no]</span></span><br><span class="line"><span class="comment">#输入yes 回车</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#接下来会继续提示:</span></span><br><span class="line"><span class="comment">#Anaconda3 will now be installed into this location:</span></span><br><span class="line"><span class="comment">#/Users/&lt;yourname&gt;/anaconda3</span></span><br><span class="line"><span class="comment"># - Press ENTER to confirm the location</span></span><br><span class="line"><span class="comment"># - Press CTRL-C to abort the installation</span></span><br><span class="line"><span class="comment"># - Or specify a different location below</span></span><br><span class="line"><span class="comment">#直接回车就行(默认安装位置)</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#继续提示:</span></span><br><span class="line"><span class="comment">#Do you wish the installer to initialize Anaconda3</span></span><br><span class="line"><span class="comment">#by running conda init? [yes|no]</span></span><br><span class="line"><span class="comment">#输入yes 回车</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#等待一会会出现：</span></span><br><span class="line"><span class="comment">#done</span></span><br><span class="line"><span class="comment">#installation finished.</span></span><br><span class="line"><span class="comment">#Do you wish the installer to initialize Anaconda3</span></span><br><span class="line"><span class="comment">#by running conda init? [yes|no]</span></span><br><span class="line"><span class="comment">#[yes] &gt;&gt;&gt; yes</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/condabin/conda</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/bin/conda</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/bin/conda-env</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/bin/activate</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/bin/deactivate</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/etc/profile.d/conda.sh</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/etc/fish/conf.d/conda.fish</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/shell/condabin/Conda.psm1</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/shell/condabin/conda-hook.ps1</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/lib/python3.8/site-packages/xontrib/conda.xsh</span></span><br><span class="line"><span class="comment">#no change     /Users/&lt;yourname&gt;/anaconda3/etc/profile.d/conda.csh</span></span><br><span class="line"><span class="comment">#modified      /Users/&lt;yourname&gt;/.zshrc</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#==&gt; For changes to take effect, close and re-open your current shell. &lt;==</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#If you&#x27;d prefer that conda&#x27;s base environment not be activated on startup,</span></span><br><span class="line"><span class="comment">#   set the auto_activate_base parameter to false:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#conda config --set auto_activate_base false</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#Thank you for installing Anaconda3!</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#===========================================================================</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Working with Python and Jupyter notebooks is a breeze with PyCharm Pro,</span></span><br><span class="line"><span class="comment">#designed to be used with Anaconda. Download now and have the best data</span></span><br><span class="line"><span class="comment">#tools at your fingertips.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#PyCharm Pro for Anaconda is available at: https://www.anaconda.com/pycharm</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#至此就安装完毕了</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>关掉当前<code>shell</code>窗口, 再打开一个新的, 会发现命令行前面多了一个<code>(base)</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(base)  &lt;yourname&gt;@MacBook-Pro &gt; ~ &gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>这个<code>(base)</code>表示当前处于<code>基础虚拟环境</code>, 如果不想打开命令行的时候激活这个环境, 可以执行:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br><span class="line"><span class="comment">#执行之后关掉当前shell, 再次打开生效</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="升级">升级</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把conda更新到最新版</span></span><br><span class="line">conda update conda</span><br><span class="line"><span class="comment"># 把anaconda更新的新版</span></span><br><span class="line">conda update anaconda</span><br><span class="line"><span class="comment"># 所有的自定义配置环境也更新到最新版</span></span><br><span class="line">conda update --all</span><br></pre></td></tr></table></figure>
+<h3 id="虚拟环境配置-测试">虚拟环境配置(测试)</h3>
+<ul>
+<li>
+<p>更新<code>conda</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">conda update -n base conda</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#执行后会有以下提示:</span></span><br><span class="line"><span class="comment">#The following packages will be UPDATED:</span></span><br><span class="line"><span class="comment">#conda  4.10.1-py38hecd8cb5_1 --&gt; 4.10.3-py38hecd8cb5_0</span></span><br><span class="line"><span class="comment">#Proceed ([y]/n)?</span></span><br><span class="line"><span class="comment">#输入y 回车</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建一个虚拟环境(以<code>Python3.8</code>为例)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conda create -n python38 python=3.8</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#Proceed ([y]/n)?</span></span><br><span class="line"><span class="comment">#输入y 回车</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建一个虚拟环境(以<code>Python2.7</code>为例)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conda create -n python27 python=2.7</span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#Proceed ([y]/n)?</span></span><br><span class="line"><span class="comment">#输入y 回车</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>切换到<code>python38</code>环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda activate python38</span><br><span class="line"><span class="comment">#成功之后命令行前面会出现(python38), 表示当前虚拟环境为python38</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>切换到<code>python27</code>环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda activate python27</span><br><span class="line"><span class="comment">#成功之后命令行前面会出现(python27), 表示当前虚拟环境为python38</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>注销环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br><span class="line"><span class="comment">#根据激活环境数量可能需要输入数次</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="常用命令">常用命令</h3>
+<h4 id="环境管理">环境管理</h4>
+<ul>
+<li>
+<p>列举环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda env list</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建环境</p>
+<ul>
+<li>
+<p>创建指定<code>Python</code>版本的环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -n &lt;env name&gt; python=&lt;version&gt;</span><br><span class="line"><span class="comment">#例(创建一个名为my_env_1且Python版本为2.7的环境)</span></span><br><span class="line"><span class="comment">#conda create -n my_env_27 python=2.7</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建包含某些包的环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -n &lt;env name&gt; &lt;package name&gt; &lt;package name&gt; ...</span><br><span class="line"><span class="comment">#例(创建一个名为my_env_2且包含numpy、scipy包的环境)</span></span><br><span class="line"><span class="comment">#conda create -n my_env_2 numpy scipy</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建指定<code>Python</code>版本且包含某些包的环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -n &lt;env name&gt; python=&lt;version&gt; &lt;package name&gt; &lt;package name&gt; ...</span><br><span class="line"><span class="comment">#例子(创建一个名为my_env_3且Python版本为3.5且包含numpy、scipy包的环境)</span></span><br><span class="line"><span class="comment">#conda create -n my_env_3 python=3.5 numpy scipy</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>复制环境(保证操作的环境当前没有被激活)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda create -n &lt;new env name&gt; --<span class="built_in">clone</span> &lt;old env name&gt;</span><br><span class="line"><span class="comment">#例(从名字为python38的环境clone一份出来, 叫python38_bak)</span></span><br><span class="line"><span class="comment">#conda create -n python38_bak --clone python38</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>删除环境(保证操作的环境当前没有被激活)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda remove -n &lt;env name&gt; --all</span><br><span class="line"><span class="comment">#例(删除名为python27的环境)</span></span><br><span class="line"><span class="comment">#conda remove -n python27 --all</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>激活环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate &lt;env name&gt;</span><br><span class="line"><span class="comment">#例(激活python27环境)</span></span><br><span class="line"><span class="comment">#conda activate python27</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>注销(退出)环境</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda deactivate</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="包管理">包管理</h4>
+<ul>
+<li>
+<p>列举环境下的包(当前处于该环境可以省略<code>-n &lt;env name&gt;</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda list -n &lt;env name&gt;</span><br><span class="line"><span class="comment">#例(列举python38环境下的所有包)</span></span><br><span class="line"><span class="comment">#conda list -n python38</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>为环境安装包(当前处于该环境可以省略<code>-n &lt;env name&gt;</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda install -n &lt;env name&gt; &lt;package name&gt;</span><br><span class="line"><span class="comment">#例(为python38安装scipy)</span></span><br><span class="line"><span class="comment">#conda install -n python38 scipy</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>如果需要指定版本的包:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -n &lt;env name&gt; &lt;package name&gt;=&lt;version&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装本地包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install  --use-local &lt;path...package&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>安装指定渠道的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install -c &lt;channel name&gt; &lt;package name&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>更新环境的包(当前处于该环境可以省略<code>-n &lt;env name&gt;</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda update -n &lt;env name&gt; &lt;package name&gt;</span><br><span class="line"><span class="comment">#例(为python38更新scipy)</span></span><br><span class="line"><span class="comment">#conda update -n python38 scipy</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>卸载环境的包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda uninstall -n &lt;env name&gt; &lt;package name&gt;</span><br><span class="line"><span class="comment">#例(为python38卸载scipy包)</span></span><br><span class="line"><span class="comment">#conda uninstall -n python38 scipy</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="iTerm2的问题">iTerm2的问题</h3>
+<ul>
+<li>在使用<code>iTerm2</code>作为终端的时候, 如果使用了自定义的主题比如笔者这里所用的<code>powerlevel9k</code>, 会出现一个小问题, 那就是命令行头部的位置不会显示当前<code>conda</code>的环境名称;</li>
+<li>解决的方式其实就是找到这个主题的文件, 文件位置<code>~/.oh-my-zsh/custom/themes/powerlevel9k/powerlevel9k.zsh-theme</code>;<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原代码段</span></span><br><span class="line">defined POWERLEVEL9K_LEFT_PROMPT_ELEMENTS || POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)</span><br><span class="line">defined POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS || POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs <span class="built_in">history</span> time)</span><br><span class="line"><span class="comment"># 改为</span></span><br><span class="line">defined POWERLEVEL9K_LEFT_PROMPT_ELEMENTS || POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda context dir vcs)</span><br><span class="line">defined POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS || POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs <span class="built_in">history</span> time)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7"><span class="toc-number">2.</span> <span class="toc-text">升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE-%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">虚拟环境配置(测试)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">4.</span> <span class="toc-text">常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86"><span class="toc-number">4.1.</span> <span class="toc-text">环境管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86"><span class="toc-number">4.2.</span> <span class="toc-text">包管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#iTerm2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">iTerm2的问题</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&text=Anaconda虚拟环境配置"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&is_video=false&description=Anaconda虚拟环境配置"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Anaconda虚拟环境配置&body=Check out this article: https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&title=Anaconda虚拟环境配置"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&name=Anaconda虚拟环境配置&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/07/03/Anaconda%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/&t=Anaconda虚拟环境配置"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

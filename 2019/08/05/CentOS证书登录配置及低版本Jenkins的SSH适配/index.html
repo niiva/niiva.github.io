@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="生成秘钥 分发秘钥 验证 关闭密码登录 关于 Jenkins 的 SSH   生成秘钥   执行ssh-keygen 1234567891011121314151617181920212223#过程#第一步输入秘钥生成的位置(默认~&#x2F;.ssh&#x2F;id_rsa)#第二、第三步输入秘钥的密码(一般都免密)Generating public&#x2F;private rsa key pair.Enter fi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS证书登录配置及低版本Jenkins的SSH适配">
+<meta property="og:url" content="https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="生成秘钥 分发秘钥 验证 关闭密码登录 关于 Jenkins 的 SSH   生成秘钥   执行ssh-keygen 1234567891011121314151617181920212223#过程#第一步输入秘钥生成的位置(默认~&#x2F;.ssh&#x2F;id_rsa)#第二、第三步输入秘钥的密码(一般都免密)Generating public&#x2F;private rsa key pair.Enter fi">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-08-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-24T04:10:53.485Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>CentOS证书登录配置及低版本Jenkins的SSH适配</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/08/17/Linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/08/05/SSH%E7%AE%80%E6%98%93%E8%BF%9E%E6%8E%A5%E9%85%8D%E7%BD%AE/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&text=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&is_video=false&description=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CentOS证书登录配置及低版本Jenkins的SSH适配&body=Check out this article: https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&name=CentOS证书登录配置及低版本Jenkins的SSH适配&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&t=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%A7%98%E9%92%A5"><span class="toc-number">1.</span> <span class="toc-text">生成秘钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8F%91%E7%A7%98%E9%92%A5"><span class="toc-number">2.</span> <span class="toc-text">分发秘钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">3.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-number">4.</span> <span class="toc-text">关闭密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-Jenkins-%E7%9A%84-SSH"><span class="toc-number">5.</span> <span class="toc-text">关于 Jenkins 的 SSH</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        CentOS证书登录配置及低版本Jenkins的SSH适配
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2019-08-04T16:00:00.000Z" itemprop="datePublished">2019-08-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E7%94%9F%E6%88%90%E7%A7%98%E9%92%A5">生成秘钥</a></li>
+<li><a href="#%E5%88%86%E5%8F%91%E7%A7%98%E9%92%A5">分发秘钥</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81">验证</a></li>
+<li><a href="#%E5%85%B3%E9%97%AD%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95">关闭密码登录</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8E-jenkins-%E7%9A%84-ssh">关于 Jenkins 的 SSH</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="生成秘钥">生成秘钥</h3>
+<ul>
+<li>
+<p>执行<code>ssh-keygen</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#过程</span></span><br><span class="line"><span class="comment">#第一步输入秘钥生成的位置(默认~/.ssh/id_rsa)</span></span><br><span class="line"><span class="comment">#第二、第三步输入秘钥的密码(一般都免密)</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/root/.ssh/id_rsa):</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /Users/dujin/Desktop/id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /Users/dujin/Desktop/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:tnYw0cazRnDZR9km9NytfYOEZd/ID36ITJBaTAu373w root@localhost.localdomain</span><br><span class="line">The key<span class="string">&#x27;s randomart image is:</span></span><br><span class="line"><span class="string">+---[RSA 3072]----+</span></span><br><span class="line"><span class="string">|        oo=+ =oo |</span></span><br><span class="line"><span class="string">|         B=+=.=+*|</span></span><br><span class="line"><span class="string">|        .oO..o++*|</span></span><br><span class="line"><span class="string">|        .+ *.o.* |</span></span><br><span class="line"><span class="string">|        S o +.+.=|</span></span><br><span class="line"><span class="string">|       . = o   .o|</span></span><br><span class="line"><span class="string">|        o . o E  |</span></span><br><span class="line"><span class="string">|       . .   .   |</span></span><br><span class="line"><span class="string">|                 |</span></span><br><span class="line"><span class="string">+----[SHA256]-----+</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>生成结果为<code>id_rsa(私钥)</code>和<code>id_rsa.pub(公钥)</code>:</p>
+<ul>
+<li>私钥是用来做验证请求的, 放在<span style="color:#fb7a08;font-weight:bold;">本地</span>;</li>
+<li>公钥是用来验证请求的, 放在<span style="color:#fb7a08;font-weight:bold;">服务端</span>;</li>
+</ul>
+</li>
+</ul>
+<h3 id="分发秘钥">分发秘钥</h3>
+<ul>
+<li>
+<p>方式 1:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i root@&lt;server_ip&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>方式 2:</p>
+<ul>
+<li>打开<span style="color:#fb7a08;font-weight:bold;">服务端</span>文件<code>/root/.ssh/authorized_keys</code>, 将上一步生成的<code>id_rsa.pub</code>里面的内容追加写入到<code>/root/.ssh/authorized_keys</code>;</li>
+</ul>
+</li>
+<li>
+<p>注意:</p>
+<ul>
+<li><span style="color:#fb7a08;font-weight:bold;">服务端</span><code>.ssh</code>目录的权限必须是<code>700</code></li>
+<li><span style="color:#fb7a08;font-weight:bold;">服务端</span><code>.ssh/authorized_keys</code>文件权限必须是<code>600</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="验证">验证</h3>
+<ul>
+<li>
+<p>在终端连接(两种方式取决于<code>id_rsa</code>放在什么路径)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自定义id_rsa路径</span></span><br><span class="line">ssh -i /xxx/xxx/id_rsa root@&lt;server_ip&gt;</span><br><span class="line"><span class="comment">#默认路径(/root/.ssh/id_rsa)</span></span><br><span class="line">ssh &lt;server_ip&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="关闭密码登录">关闭密码登录</h3>
+<ul>
+<li>
+<p>编辑<code>/etc/ssh/sshd_config</code></p>
+</li>
+<li>
+<p>将<code>PasswordAuthentication</code>参数值修改为<code>no</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PasswordAuthentication no</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>重启<code>ssh</code>服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart sshd.service</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="关于-Jenkins-的-SSH">关于 Jenkins 的 SSH</h3>
+<blockquote>
+<p>遇到了一个<code>Jenkins</code>无法使用私钥登录的问题, 查了一下, 是<code>Jenkins</code>低版本在检验密钥时还不支持<code>OPENSSL</code>的格式, 在此纪录一下;</p>
+</blockquote>
+<ul>
+<li>
+<p>查看一下刚才生成的秘钥, 可以看到头部信息<code>BEGIN OPENSSH PRIVATE KEY</code>, 低版本的<code>Jenkins</code>不支持这种格式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat /root/.ssh/id_rsa</span><br><span class="line"><span class="comment">#-----BEGIN OPENSSH PRIVATE KEY-----</span></span><br><span class="line"><span class="comment">#b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn</span></span><br><span class="line"><span class="comment">#NhAAAAAwEAAQAAAYEA6QlIhtan1+RoY4B6WlHe2MBlTWQjhyFtpyOU78FcQAfYhBxoPeqd</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>解决方法是在生成秘钥对的时候, 指定旧的格式:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -m PEM -t rsa -b 4096</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>查看一下这样生成出来的<code>id_rsa</code>, 可以看到头部信息<code>BEGIN RSA PRIVATE KEY</code>, 这个<code>私钥</code>就可以在<code>Jenkins</code>里配置<code>Path to key</code>了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat id_rsa</span><br><span class="line"><span class="comment">#-----BEGIN RSA PRIVATE KEY-----</span></span><br><span class="line"><span class="comment">#MIIJKAIBAAKCAgEAuKYBoYnUsZJW8MsVcP1RLKgBwMs4wW7uzRYgqhho2R7itVLu</span></span><br><span class="line"><span class="comment">#soO5t/YNLRoAMm2n6TT+1jnva6wfJ+F8e8j1U0afo/Lbr64XCxHvr/q45dVyIAl+</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br><span class="line"><span class="comment">#.</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>参考
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/architectforest/p/13707244.html">https://www.cnblogs.com/architectforest/p/13707244.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/areyouready/p/9716271.html">https://www.cnblogs.com/areyouready/p/9716271.html</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%A7%98%E9%92%A5"><span class="toc-number">1.</span> <span class="toc-text">生成秘钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8F%91%E7%A7%98%E9%92%A5"><span class="toc-number">2.</span> <span class="toc-text">分发秘钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81"><span class="toc-number">3.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95"><span class="toc-number">4.</span> <span class="toc-text">关闭密码登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-Jenkins-%E7%9A%84-SSH"><span class="toc-number">5.</span> <span class="toc-text">关于 Jenkins 的 SSH</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&text=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&is_video=false&description=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CentOS证书登录配置及低版本Jenkins的SSH适配&body=Check out this article: https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&title=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&name=CentOS证书登录配置及低版本Jenkins的SSH适配&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/08/05/CentOS%E8%AF%81%E4%B9%A6%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%BD%8E%E7%89%88%E6%9C%ACJenkins%E7%9A%84SSH%E9%80%82%E9%85%8D/&t=CentOS证书登录配置及低版本Jenkins的SSH适配"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

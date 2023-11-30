@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="从一段代码开始 async&amp;await Future Completer Stream Isolate   从一段代码开始   首先看一段代码: 12345678910111213141516171819main(List&lt;String&gt; args) &amp;#123;    print(&amp;#x27;start&amp;#x27;);    doSomething();    prin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dart中的异步">
+<meta property="og:url" content="https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/index.html">
+<meta property="og:site_name" content="老杜的一片乐土">
+<meta property="og:description" content="从一段代码开始 async&amp;await Future Completer Stream Isolate   从一段代码开始   首先看一段代码: 12345678910111213141516171819main(List&lt;String&gt; args) &amp;#123;    print(&amp;#x27;start&amp;#x27;);    doSomething();    prin">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-26T20:10:52.000Z">
+<meta property="article:author" content="老杜">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Dart中的异步</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="老杜的一片乐土" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2021/03/31/Flutter%E5%BC%80%E5%8F%91Mac%E6%A1%8C%E9%9D%A2%E5%BA%94%E7%94%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2021/02/18/Flutter%E9%85%8D%E7%BD%AE&%E9%97%AE%E9%A2%98/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&text=Dart中的异步"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&is_video=false&description=Dart中的异步"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Dart中的异步&body=Check out this article: https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&name=Dart中的异步&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&t=Dart中的异步"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">从一段代码开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#async-await"><span class="toc-number">2.</span> <span class="toc-text">async&amp;await</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">3.</span> <span class="toc-text">Future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Completer"><span class="toc-number">4.</span> <span class="toc-text">Completer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stream"><span class="toc-number">5.</span> <span class="toc-text">Stream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Isolate"><span class="toc-number">6.</span> <span class="toc-text">Isolate</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Dart中的异步
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">老杜</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-03-25T16:00:00.000Z" itemprop="datePublished">2021-03-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Flutter/">Flutter</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- code_chunk_output -->
+<ul>
+<li><a href="#%E4%BB%8E%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BC%80%E5%A7%8B">从一段代码开始</a></li>
+<li><a href="#asyncawait">async&amp;await</a></li>
+<li><a href="#future">Future</a></li>
+<li><a href="#completer">Completer</a></li>
+<li><a href="#stream">Stream</a></li>
+<li><a href="#isolate">Isolate</a></li>
+</ul>
+<!-- /code_chunk_output -->
+<h3 id="从一段代码开始">从一段代码开始</h3>
+<ul>
+<li>
+<p>首先看一段代码:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>);</span><br><span class="line">    doSomething();</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future doSomething() <span class="keyword">async</span> &#123;</span><br><span class="line">    Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">3</span>));</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;do something...&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Running] dart &quot;async.dart&quot;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> start</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> do something...</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> end</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Done] exited with code=0 in 3.486 seconds</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以看到三行文字基本同时输出, 输出结果并没有受到<code>异步</code>的影响, 但是影响了<code>[Done]</code>的时间;</li>
+</ul>
+</li>
+<li>
+<p>修改一下以上代码:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>);</span><br><span class="line">    doSomething();</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future doSomething() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">3</span>));</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;do something...&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Running] dart &quot;/Users/dujin/My/Code/Work/2020/Dart/async.dart&quot;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> start</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> end</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> do something...</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Done] exited with code=0 in 3.527 seconds</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里可以看到<code>do something...</code>是在最后后输出的, 可以证明<code>doSomething</code>是异步调用的;</li>
+<li>而且<code>do something...</code>的输出时间是在<code>end</code>输出的三秒之后, 原因是<code>await Future.delayed(Duration(seconds: 3));</code>阻塞了异步执行的过程;</li>
+</ul>
+</li>
+<li>
+<p>再次修改以上代码:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;start&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> doSomething();</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;end&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future doSomething() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">3</span>));</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;do something...&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Running] dart &quot;/Users/dujin/My/Code/Work/2020/Dart/async.dart&quot;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> start</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> do something...</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> end</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Done] exited with code=0 in 3.516 seconds</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这次<code>start</code>先输出, 三秒之后输出<code>do something...</code>和<code>end</code>, 原因是<code>main</code>中用<code>await doSomething();</code>对这个步骤进行了<code>阻塞</code>;</li>
+</ul>
+</li>
+<li>
+<p><span style="color:#fb7a08;font-weight:bold;">那么以上代码中的<code>async</code>、<code>await</code>和<code>Future</code>都代表什么呢?</span></p>
+</li>
+<li>
+<p><span style="color:#fb7a08;font-weight:bold;">↓↓↓↓↓ 往下看 ↓↓↓↓↓</span></p>
+</li>
+</ul>
+<h3 id="async-await">async&amp;await</h3>
+<ul>
+<li>
+<p>概念:</p>
+<blockquote>
+<p><code>async</code>:用于标记一个方法是异步方法, 即方法内含有耗时操作;<br>
+<code>await</code>:等待某个异步方法执行完毕, 可以理解为一种<code>阻塞</code>;</p>
+</blockquote>
+</li>
+<li>
+<p>注意:</p>
+<blockquote>
+<p><code>await</code>只能使用在<code>async</code>修饰的方法中;</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="Future">Future</h3>
+<ul>
+<li>
+<p>概念:</p>
+<blockquote>
+<p>如果一个<code>Fuction</code>被<code>async</code>修饰, 则该<code>Fuction</code>将会返回一个<code>Future</code>, <code>Future</code>的运行值即该<code>Fuction</code>的返回值;</p>
+</blockquote>
+<ul>
+<li>简单的通过字面意思理解一下,<code>Future</code>英文意思是<code>未来</code>, 一个方法的返回值是<code>未来</code>, 大概意思就是<code>这个返回值是将来要使用的</code>@.@;</li>
+</ul>
+</li>
+<li>
+<p><code>Future</code>的几种状态(还是通过一段代码来看):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">// 模拟一个网络请求</span></span><br><span class="line">  requestSomething().then(</span><br><span class="line">      <span class="comment">// 返回值可能是value</span></span><br><span class="line">      (value) &#123;</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;value is:<span class="subst">$value</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="comment">// 也可能是error</span></span><br><span class="line">      onError: (error) &#123;</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;error is:<span class="subst">$error</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  ).whenComplete(</span><br><span class="line">      () &#123;</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;completed!&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  ).catchError(</span><br><span class="line">      <span class="comment">// 捕获error</span></span><br><span class="line">      (error) &#123;</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;catched error:<span class="subst">$error</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  ).timeout(<span class="built_in">Duration</span>(seconds: <span class="number">4</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; requestSomething() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">3</span>));</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;this is a result!&#x27;</span>;</span><br><span class="line">  <span class="comment">// return Future.error(&#x27;this is an error!&#x27;);</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>then</code>来获取<code>Future</code>的返回值(也可能是<code>error</code>);</li>
+<li><code>whenComplete</code>相当于<code>try...catch</code>中的<code>finally</code>, 即无论结果如何, 只要执行完毕, 就会被调用;</li>
+<li><code>catchError</code>用来捕获错误, 但是与<code>then</code>里的<code>onError</code>冲突, <span style="color:#fb7a08;font-weight:bold;">代码中有<code>onError</code>回调时<code>catchError</code>不会执行</span>;</li>
+<li><code>timeout</code>用来设置超时, 如果上面代码中改成<code>timeout(Duration(seconds: 2));</code>则会输出:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Unhandled exception:</span><br><span class="line">TimeoutException after 0:00:02.000000: Future not completed</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Future</code>的构造函数(还是先看一段代码):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;A&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> Future(() &#123;</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;B&#x27;</span>);</span><br><span class="line">      Future(() =&gt; <span class="built_in">print</span>(<span class="string">&#x27;C&#x27;</span>));</span><br><span class="line">      Future.<span class="keyword">sync</span>(() =&gt; <span class="built_in">print</span>(<span class="string">&#x27;D&#x27;</span>));</span><br><span class="line">      Future.microtask(() =&gt; <span class="built_in">print</span>(<span class="string">&#x27;E&#x27;</span>));</span><br><span class="line">      Future(() =&gt; <span class="built_in">print</span>(<span class="string">&#x27;F&#x27;</span>));</span><br><span class="line">      <span class="built_in">print</span>(<span class="string">&#x27;G&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;H&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> A</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> B</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> D</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> G</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> H</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> E</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> C</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> F</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>优先级:<code>Main</code> &gt; <code>sync</code> &gt; <code>MicroTask</code> &gt; <code>EventQueue</code></p>
+<ul>
+<li><code>Future</code>:默认构造函数, <code>EventQueue</code>任务(优先级最低);</li>
+<li><code>Future.microtask</code>:<code>MicroTask</code>任务(可以理解为优先级第二高的);</li>
+<li><code>Future.sync</code>:立即返回结果(可以理解为中优先级最高的);</li>
+</ul>
+</li>
+<li>
+<p>其他:</p>
+</li>
+<li>
+<p><code>Future.delayed</code>延时执行;</p>
+</li>
+<li>
+<p><code>Future.wait</code>(参数是<code>List&lt;Future&gt;</code>)跟<code>JavaScript</code>里的<code>Promise.all</code>差不多, 看个例子:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">    <span class="comment">// 模拟一组网络请求</span></span><br><span class="line">    Future.wait([</span><br><span class="line">        request1(),</span><br><span class="line">        request2(),</span><br><span class="line">        request3(),</span><br><span class="line">    ]).then((value) =&gt; <span class="built_in">print</span>(value));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; request1() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">1</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;result1&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; request2() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">2</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;result2&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; request3() <span class="keyword">async</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> Future.delayed(<span class="built_in">Duration</span>(seconds: <span class="number">3</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;result3&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Running] dart &quot;async.dart&quot;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [result1, result2, result3]</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> [Done] exited with code=0 in 3.554 seconds</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>3 秒后输出, 原因是<code>Future.wait</code>等待所有任务执行完毕, 而<code>request3()</code>耗时最长为 3 秒;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Completer">Completer</h3>
+<ul>
+<li>
+<p>什么是<code>Completer</code>? 还是先看一段代码;</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">  getStr().then(</span><br><span class="line">      (value) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;value:<span class="subst">$value</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; getStr() <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="built_in">String</span> str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">await</span> Future.delayed(</span><br><span class="line">      (<span class="built_in">Duration</span>(seconds: <span class="number">3</span>)),</span><br><span class="line">      () &#123;</span><br><span class="line">          str = <span class="string">&#x27;this is a string&#x27;</span>;</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;doing something else...&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> doing something else...</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> value:this is </span>a<span class="markdown"> string</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里<code>doing something else...</code>和<code>value:this is a string</code>是在三秒之后同时输出的, 因为我们用<code>await</code>阻塞了<code>getStr()</code>方法;</li>
+</ul>
+</li>
+<li>
+<p>试想一个问题, 如果我们需要<code>getStr()</code>方法在<code>doing something else...</code>的同时去做<code>Future.delayed</code>的操作, 即这两步<code>互不阻塞</code>, 该怎么办(直接去掉<code>await</code>会直接返回<code>''</code>)? 这里就可以用<code>Completer</code>:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) &#123;</span><br><span class="line">  getStr().then(</span><br><span class="line">      (value) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;value:<span class="subst">$value</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Future&lt;<span class="built_in">String</span>&gt; getStr() <span class="keyword">async</span> &#123;</span><br><span class="line">  Completer&lt;<span class="built_in">String</span>&gt; completer = Completer();</span><br><span class="line">  Future.delayed(</span><br><span class="line">      (<span class="built_in">Duration</span>(seconds: <span class="number">3</span>)),</span><br><span class="line">      () &#123;</span><br><span class="line">          completer.complete(<span class="string">&#x27;this is a string&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;doing something else...&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> completer.future;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> doing something else...</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> value:this is </span>a<span class="markdown"> string</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里先输出<code>doing something else...</code>, 三秒钟后输出<code>value:this is a string</code>;</li>
+<li>当我们的方法中有异步处理并需要返回处理结果, 而且不希望其他逻辑被<code>阻塞</code>, 就可以用<code>Completer</code>;</li>
+<li><span style="color:#fb7a08;font-weight:bold;">我的理解是:</span>
+<ul>
+<li><span style="color:#fb7a08;font-weight:bold;"><code>completer.future</code>告诉接收方, 我未来会给你一个数据, 请等待;</span></li>
+<li><span style="color:#fb7a08;font-weight:bold;"><code>completer.complete</code>告诉接收方, 我承诺的数据来了;</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Stream">Stream</h3>
+<ul>
+<li>
+<p>概念:</p>
+<blockquote>
+<p><code>Stream</code>也是用于接收异步事件数据, 和<code>Future</code>不同的是, 它可以接收多个异步操作的结果;</p>
+</blockquote>
+<ul>
+<li>还是从字面理解<code>Stream</code>-&gt;流, 可以立即为持续的数据;</li>
+<li><code>Stream</code>用于会多次读取数据的异步任务场景, 如网络内容下载、文件读写等;</li>
+</ul>
+</li>
+<li>
+<p><code>Steam</code>的几种状态(看一段代码):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  Stream st = Stream.fromFutures([</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> (<span class="string">&#x27;第一步&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">2</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第二步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">3</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> Future.error(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">4</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第三步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  st.listen(</span><br><span class="line">      (data) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;data:<span class="subst">$data</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      onDone: () &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;done&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      onError: (e) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;error:<span class="subst">$e</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      cancelOnError: <span class="keyword">false</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> [Running] dart &quot;async.dart&quot;</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> data:第一步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> data:第二步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> error:error</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> data:第三步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> done</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet">*</span> [Done] exited with code=0 in 4.537 seconds</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>用<code>listen</code>订阅<code>Stream</code>;</li>
+<li><code>(data)&#123;&#125;</code>返回值回调;</li>
+<li><code>onDone</code>完成回调;</li>
+<li><code>onError</code>错误回调;</li>
+<li><code>cancelOnError</code>在发生错误时, 是否停止订阅(如果上面代码中改成<code>cancelOnError: true</code>, 则<code>error:error</code>输出后程序结束);</li>
+</ul>
+</li>
+<li>
+<p><code>StreamSubscription</code>订阅管理, 我们把上面的代码改一下:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  Stream st = Stream.fromFutures([</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> (<span class="string">&#x27;第一步&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">2</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第二步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">3</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> Future.error(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">4</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第三步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  StreamSubscription sub = st.listen(<span class="keyword">null</span>);</span><br><span class="line">  sub.onData(</span><br><span class="line">      (data) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;data:<span class="subst">$data</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">  sub.onError(</span><br><span class="line">      (e) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;error:<span class="subst">$e</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">  sub.onDone(</span><br><span class="line">      () &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;done&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>输出结果还是一样的, 只是处理方式不同;</li>
+<li><code>订阅管理</code>还提供了一些其他方法, 用于控制<code>订阅</code>:
+<ul>
+<li><code>sub.pause()</code>暂停订阅;</li>
+<li><code>sub.resume()</code>回复订阅;</li>
+<li><code>sub.isPaused</code>是否暂停状态;</li>
+<li><code>sub.cancel()</code>取消订阅;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Stream</code>的订阅方式分为<code>单订阅</code>和<code>多订阅</code>, 上面例子中的<code>listen</code>属于单订阅, 如果我们需要一个<code>Stream</code>被多个位置监听(订阅), 可以这样做:</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  Stream st = Stream.fromFutures([</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> (<span class="string">&#x27;第一步&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">2</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第二步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">3</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> Future.error(<span class="string">&#x27;error&#x27;</span>);</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">      Future.delayed(</span><br><span class="line">          <span class="built_in">Duration</span>(seconds: <span class="number">4</span>),</span><br><span class="line">          () &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="string">&#x27;第三步&#x27;</span>;</span><br><span class="line">          &#125;,</span><br><span class="line">      ),</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 转换为广播模式</span></span><br><span class="line">  Stream bs = st.asBroadcastStream();</span><br><span class="line"></span><br><span class="line">  StreamSubscription sub1 = bs.listen(</span><br><span class="line">      (data) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;sub1 data:<span class="subst">$data</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      onError: (e) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;sub1 error:<span class="subst">$e</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      cancelOnError: <span class="keyword">false</span>,</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  StreamSubscription sub2 = bs.listen(</span><br><span class="line">      (data) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;sub2 data:<span class="subst">$data</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      onError: (e) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">&#x27;sub2 error:<span class="subst">$e</span>&#x27;</span>);</span><br><span class="line">      &#125;,</span><br><span class="line">      cancelOnError: <span class="keyword">true</span>,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub1 data:第一步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub2 data:第一步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub1 data:第二步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub2 data:第二步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub1 error:error</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub2 error:error</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> sub1 data:第三步</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>核心就是用<code>asBroadcastStream()</code>把<code>Stream</code>转换为广播模式;</li>
+<li>输出结果中, <code>sub2</code>的第三步没有输出, 是因为<code>sub2</code>设置了<code>cancelOnError: true</code>, 发生错误之后<code>sub2</code>的订阅终止了, 但是并没有影响<code>Stream</code>的工作, 所以<code>sub1</code>也并未受到影响;</li>
+<li><span style="color:#fb7a08;font-weight:bold;">我是这么理解<code>单订阅</code>和<code>多订阅</code>的, <code>单订阅</code>相当于打电话,<code>多订阅</code>相当于广播;</span>
+<ul>
+<li><span style="color:#fb7a08;font-weight:bold;"><code>单订阅</code>只有被监听的时候才会触发(相当于你给别人打电话, 别人接了电话你才能说你的内容);</span></li>
+<li><span style="color:#fb7a08;font-weight:bold;"><code>多订阅</code>一直在向外传输数据, 不管有没有订阅者(相当于你在通过大喇叭广播, 不管有没有人听, 你的内容都说出来了);</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="Isolate">Isolate</h3>
+<ul>
+<li>
+<p><code>isolate</code>意为<code>隔离区</code>, 官方解释:</p>
+<blockquote>
+<p><code>Dart</code>应用程序都在单个隔离区<code>Isolate</code>中运行所有代码, 但是如果需要, 可以同时拥有多个隔离区<code>Isolate</code>;</p>
+</blockquote>
+</li>
+<li>
+<p>可以理解为<code>独立的运行区域</code>, 官方推荐用法:</p>
+<blockquote>
+<p>如果要执行的计算量非常大, 以至于如果它在<code>主隔离区</code>中运行, 可能会导致丢帧, 那么可以使用<code>Isolate.spawn()</code>或<code>Flutter</code>的<code>compute()</code>函数, 这两个函数都创建了一个单独的隔离区<code>Isolate</code>来进行数字运算, 使主隔离区程序可以自由地重建和呈现小部件树;</p>
+</blockquote>
+</li>
+<li>
+<p>用法(看一段代码):</p>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">main(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; args) <span class="keyword">async</span> &#123;</span><br><span class="line">  <span class="comment">// 建立与分隔离区通讯端口</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」建立通讯端口&#x27;</span>);</span><br><span class="line">  ReceivePort receivePort = ReceivePort();</span><br><span class="line">  <span class="comment">// 初始化Isolate</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」初始化分隔离区&#x27;</span>);</span><br><span class="line">  Isolate isolate = <span class="keyword">await</span> Isolate.spawn(runTimer, receivePort.sendPort);</span><br><span class="line">  <span class="comment">// 监听收信端口</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」开始监听&#x27;</span>);</span><br><span class="line">  receivePort.listen(</span><br><span class="line">      (message) &#123;</span><br><span class="line">          <span class="keyword">if</span> (message <span class="keyword">is</span> SendPort) &#123;</span><br><span class="line">              <span class="comment">// 收到隔离区的通讯端口</span></span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」收到分隔离区的「准备完毕」&#x27;</span>);</span><br><span class="line">              <span class="comment">// 下达开始指令</span></span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」下达开始指令&#x27;</span>);</span><br><span class="line">              message.send(<span class="string">&#x27;start&#x27;</span>);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="comment">// 隔离区传回来的其他数据</span></span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」收到消息:<span class="subst">$message</span>&#x27;</span>);</span><br><span class="line">              <span class="keyword">if</span> (message &gt; <span class="number">4</span>) &#123;</span><br><span class="line">                  <span class="comment">// 关闭隔离区</span></span><br><span class="line">                  <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」关闭分隔离区&#x27;</span>);</span><br><span class="line">                  isolate.kill(priority: Isolate.immediate);</span><br><span class="line">                  <span class="comment">// 关闭端口</span></span><br><span class="line">                  <span class="built_in">print</span>(<span class="string">&#x27;「主隔离区」关闭接收端口&#x27;</span>);</span><br><span class="line">                  receivePort.close();</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> runTimer(SendPort sendPort) &#123;</span><br><span class="line">  <span class="comment">// 建立与主隔离区通讯端口</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」建立通讯端口&#x27;</span>);</span><br><span class="line">  ReceivePort receivePort = ReceivePort();</span><br><span class="line">  <span class="comment">// 通知主隔离区, 我已准备完毕</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」建立通讯端口&#x27;</span>);</span><br><span class="line">  sendPort.send(receivePort.sendPort);</span><br><span class="line">  <span class="comment">// 监听收信端口</span></span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」开始监听&#x27;</span>);</span><br><span class="line">  receivePort.listen(</span><br><span class="line">      (message) &#123;</span><br><span class="line">          <span class="keyword">if</span> (<span class="string">&#x27;start&#x27;</span> == message) &#123;</span><br><span class="line">              <span class="comment">// 收到开始指令</span></span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」收到开始指令&#x27;</span>);</span><br><span class="line">              <span class="built_in">int</span> <span class="built_in">num</span> = <span class="number">0</span>;</span><br><span class="line">              Timer.periodic(</span><br><span class="line">                  <span class="keyword">new</span> <span class="built_in">Duration</span>(seconds: <span class="number">1</span>),</span><br><span class="line">                  (Timer t) &#123;</span><br><span class="line">                      <span class="built_in">num</span>++;</span><br><span class="line">                      <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」发送消息:<span class="subst">$num</span>&#x27;</span>);</span><br><span class="line">                      sendPort.send(<span class="built_in">num</span>);</span><br><span class="line">                      <span class="keyword">if</span> (<span class="built_in">num</span> &gt; <span class="number">4</span>) &#123;</span><br><span class="line">                          <span class="comment">// 计时器停止</span></span><br><span class="line">                          <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」计时器停止&#x27;</span>);</span><br><span class="line">                          t.cancel();</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125;,</span><br><span class="line">              );</span><br><span class="line">              <span class="comment">// 关闭与主隔离区通信端口</span></span><br><span class="line">              <span class="built_in">print</span>(<span class="string">&#x27;「分隔离区」关闭接收端口&#x27;</span>);</span><br><span class="line">              receivePort.close();</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="markdown">/<span class="strong">**</span></span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 输出结果:</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」建立通讯端口</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」初始化分隔离区</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」建立通讯端口</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」开始监听</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」建立通讯端口</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」开始监听</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到分隔离区的「准备完毕」</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」下达开始指令</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」收到开始指令</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」关闭接收端口</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」发送消息:1</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到消息:1</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」发送消息:2</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到消息:2</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」发送消息:3</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到消息:3</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」发送消息:4</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到消息:4</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」发送消息:5</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「分隔离区」计时器停止</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」收到消息:5</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」关闭分隔离区</span></span></span><br><span class="line"><span class="comment"><span class="markdown"><span class="bullet"> *</span> 「主隔离区」关闭接收端口</span></span></span><br><span class="line"><span class="comment"><span class="markdown"> <span class="emphasis">*/</span></span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>初始化方法<code>Isolate.spawn</code>, 两个参数<code>回调方法</code>和一个<code>ReceivePort</code>de <code>SendPort</code>;</li>
+<li>上面代码中演示了<code>分隔离区</code>和<code>主隔离区如何建立通讯</code>, 互相传递消息, 其实核心就是在<code>分隔离区</code>中向外传递并监听一个<code>ReceivePort</code>, 以此达到<code>双向通信</code>;</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E4%B8%80%E6%AE%B5%E4%BB%A3%E7%A0%81%E5%BC%80%E5%A7%8B"><span class="toc-number">1.</span> <span class="toc-text">从一段代码开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#async-await"><span class="toc-number">2.</span> <span class="toc-text">async&amp;await</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">3.</span> <span class="toc-text">Future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Completer"><span class="toc-number">4.</span> <span class="toc-text">Completer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stream"><span class="toc-number">5.</span> <span class="toc-text">Stream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Isolate"><span class="toc-number">6.</span> <span class="toc-text">Isolate</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&text=Dart中的异步"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&is_video=false&description=Dart中的异步"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Dart中的异步&body=Check out this article: https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&title=Dart中的异步"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&name=Dart中的异步&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2021/03/26/Dart%E4%B8%AD%E7%9A%84%E5%BC%82%E6%AD%A5/&t=Dart中的异步"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    老杜
+  </div>
+  <div>
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/categories/">分类</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
