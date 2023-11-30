@@ -9,7 +9,7 @@
     <meta name="description" content="挂载磁盘  过程 自动挂载   扩容   挂载磁盘 过程    阿里云控制台购买数据盘, 挂到 ESC 实例;     fdisk -l 查看数据盘(例&#x2F;dev&#x2F;vdb);     fdisk &#x2F;dev&#x2F;vdb 进入磁盘操作   3.1) n(新建) 回车; 3.2) p(主分区) 回车; 3.3) 1(编号) 回车; 3.4) (起始范围) 回车; 3.5) (结束范围) 回车; 3.6)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="阿里云ECS挂载磁盘及扩容">
-<meta property="og:url" content="https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/index.html">
+<meta property="og:url" content="https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/index.html">
 <meta property="og:site_name" content="老杜的一片乐土">
 <meta property="og:description" content="挂载磁盘  过程 自动挂载   扩容   挂载磁盘 过程    阿里云控制台购买数据盘, 挂到 ESC 实例;     fdisk -l 查看数据盘(例&#x2F;dev&#x2F;vdb);     fdisk &#x2F;dev&#x2F;vdb 进入磁盘操作   3.1) n(新建) 回车; 3.2) p(主分区) 回车; 3.3) 1(编号) 回车; 3.4) (起始范围) 回车; 3.5) (结束范围) 回车; 3.6)">
 <meta property="og:locale" content="zh_CN">
@@ -92,17 +92,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&text=阿里云ECS挂载磁盘及扩容"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&is_video=false&description=阿里云ECS挂载磁盘及扩容"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=阿里云ECS挂载磁盘及扩容&body=Check out this article: https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&name=阿里云ECS挂载磁盘及扩容&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&t=阿里云ECS挂载磁盘及扩容"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&text=阿里云ECS挂载磁盘及扩容"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&is_video=false&description=阿里云ECS挂载磁盘及扩容"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=阿里云ECS挂载磁盘及扩容&body=Check out this article: https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&name=阿里云ECS挂载磁盘及扩容&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&t=阿里云ECS挂载磁盘及扩容"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -329,17 +329,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&text=阿里云ECS挂载磁盘及扩容"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&is_video=false&description=阿里云ECS挂载磁盘及扩容"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=阿里云ECS挂载磁盘及扩容&body=Check out this article: https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&name=阿里云ECS挂载磁盘及扩容&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://www.jindu.link/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&t=阿里云ECS挂载磁盘及扩容"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&text=阿里云ECS挂载磁盘及扩容"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&is_video=false&description=阿里云ECS挂载磁盘及扩容"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=阿里云ECS挂载磁盘及扩容&body=Check out this article: https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&title=阿里云ECS挂载磁盘及扩容"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&name=阿里云ECS挂载磁盘及扩容&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://niiva.github.io/2019/05/24/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E6%8C%82%E8%BD%BD%E7%A3%81%E7%9B%98%E5%8F%8A%E6%89%A9%E5%AE%B9/&t=阿里云ECS挂载磁盘及扩容"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -360,12 +360,12 @@
     Copyright &copy;
     
     
-    2016-2023
+    2016-2024
     老杜
   </div>
-  <div>
+  <!-- <div>
     <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn">辽ICP备2021001717号-2</a> 
-  </div>
+  </div> -->
   <div class="footer-right">
     <nav>
       <ul>
