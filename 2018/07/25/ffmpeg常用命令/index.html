@@ -14,7 +14,7 @@
 <meta property="og:description" content="视频相关 音频相关   视频相关   视频剪切 12ffmpeg -ss 10 -t 15 -accurate_seek -i test.mp4 -codec copy -avoid_negative_ts 1 cut.mp4# -ss 开始时间; -t 持续时间   视频拼接 123456789ffmpeg -f concat -safe 0 -i file.txt -c copy out">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-07-24T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-27T05:10:09.453Z">
+<meta property="article:modified_time" content="2024-08-16T06:29:10.441Z">
 <meta property="article:author" content="老杜">
 <meta name="twitter:card" content="summary">
     
@@ -190,6 +190,10 @@
 </ul>
 <h3 id="音频相关">音频相关</h3>
 <ul>
+<li>
+<p>音频格式转换(m4a-&gt;flac)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.m4a -c:a flac output.flac</span><br></pre></td></tr></table></figure>
+</li>
 <li>
 <p>音频格式转换(aac-&gt;mp3)</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffmpeg -i input.aac -b:a 320k -acodec mp3 -ar 44100 -ac 2 new.mp3</span><br></pre></td></tr></table></figure>
